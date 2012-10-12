@@ -8,10 +8,15 @@
 #ifndef WINDOW_H_
 #define WINDOW_H_
 
-class Window{
+class Window {
 public:
 
-	virtual ~Window(){}
+	enum {
+		INTRO, MENU, INGAME, OPTIONS, GAMECREATION, CREDITS
+	};
+
+	virtual ~Window() {
+	}
 
 	virtual bool Load() = 0;
 

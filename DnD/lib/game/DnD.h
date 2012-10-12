@@ -13,23 +13,28 @@
 
 class DnD: public Window {
 private:
+
+	int Current;
 	bool Running;
 	sf::Window* App;
 
 public:
 
 	DnD() {
-		Running = true;
 		App = new sf::Window();
 	}
 
 	bool Load() {
-		App->Create(sf::VideoMode(800, 600, 32), "DnD Game Module");
+		App->Create(sf::VideoMode(800, 600, 32), "DnD");
+
+		if (!App->IsOpened())
+			return false;
+
 		return true;
 	}
 
 	void Loop() {
-
+		App->Display();
 	}
 
 	void Render() {
@@ -37,18 +42,31 @@ public:
 	}
 
 	void Clear() {
-
+		this->App->Close();
 	}
 
 	int Execute() {
-		this->Load();
+		if (!this->Load())
+			return EXIT_FAILURE;
 
-		bool Running = true;
-		while (Running) {
-			App->Display();
+		while (this->App->IsOpened()) {
+
+			sf::Event Event;
+
+			while (App->GetEvent(Event)) {
+				if (Event.Type == sf::Event::Closed) {
+					this->Clear();
+					return EXIT_SUCCESS;
+				}
+			}
+
+			this->Loop();
+
+			this->Render();
+
 		}
 
-		return EXIT_SUCCESS;
+		return EXIT_FAILURE;
 	}
 };
 
