@@ -11,7 +11,6 @@
 #include "../common/Window.h"
 
 class InGame: public Window{
-private:
 public:
 
 	bool Load() {

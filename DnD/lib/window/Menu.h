@@ -11,7 +11,7 @@
 #include "../common/Window.h"
 #include "../common/EventHandler.h"
 
-class Menu: public Window{
+class Menu: public Window {
 private:
 public:
 
@@ -32,6 +32,7 @@ public:
 	}
 
 	void Closed() {
+
 	}
 
 	void Resized(unsigned int Width, unsigned int Height) {

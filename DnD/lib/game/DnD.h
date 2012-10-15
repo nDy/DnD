@@ -16,7 +16,6 @@
 #include "../window/Menu.h"
 #include "../window/Options.h"
 #include <SFML/Window.hpp>
-#include <iostream>
 
 class DnD {
 private:
@@ -66,7 +65,6 @@ public:
 			}
 
 			this->Current = windows[Window::INTRO]->Loop();
-			std::cout << "Intro" << std::endl;
 			if (this->Current == Window::ERROR)
 				return DnD::ERROR;
 			else
@@ -87,7 +85,6 @@ public:
 			}
 
 			this->Current = windows[Window::MENU]->Loop();
-			std::cout << "Menu" << std::endl;
 			if (this->Current == Window::ERROR)
 				return DnD::ERROR;
 			else
@@ -106,7 +103,6 @@ public:
 			}
 
 			this->Current = windows[Window::INGAME]->Loop();
-			std::cout << "InGame" << std::endl;
 			if (this->Current == Window::ERROR)
 				return DnD::ERROR;
 			else
@@ -146,7 +142,6 @@ public:
 				break;
 			}
 		} catch (int e) {
-			std::cout << "Toma y lanza "<< e << std::endl;
 			throw e;
 		}
 	}
@@ -164,19 +159,15 @@ public:
 			sf::Event Event;
 
 			while (App->GetEvent(Event)) {
-				try {
-					this->Event(Event);
-				} catch (int e) {
+
+				this->Event(Event);
+				this->Current = windows[this->Current]->getCurrent();
+
+				if (Event.Type == sf::Event::Closed) {
 					this->Clear();
-					if (e == Window::ERROR) {
-						return EXIT_FAILURE;
-					} else if (e == Window::SUCCESS) {
-						return EXIT_SUCCESS;
-					} else {
-						this->Current = e;
-						std::cout<<"asiigna el current"<<std::endl;
-					}
+					return EXIT_SUCCESS;
 				}
+
 				if (this->Loop() == DnD::ERROR)
 					return EXIT_FAILURE;
 				if (this->Render() == DnD::ERROR)

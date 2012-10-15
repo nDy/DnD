@@ -14,6 +14,7 @@
 
 class Intro: public Window {
 private:
+
 public:
 
 	bool Load() {
@@ -48,12 +49,9 @@ public:
 	void TextEntered(uint32_t UnicodeText) {
 	}
 
-	void KeyPressed(sf::Key::Code Code, bool Alt, bool Ctrl, bool Shift) throw (int){
-		if(Code == sf::Key::Space){
-			std::cout << "Lanza "<<Window::MENU << std::endl;
-			throw Window::MENU;
-
-
+	void KeyPressed(sf::Key::Code Code, bool Alt, bool Ctrl, bool Shift) {
+		if (Code == sf::Key::Space) {
+			this->setCurrent(Window::MENU);
 		}
 	}
 

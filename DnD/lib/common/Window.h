@@ -11,11 +11,20 @@
 #include "EventHandler.h"
 #include <SFML/Window.hpp>
 
-class Window : virtual public EventHandler{
+class Window: virtual public EventHandler {
+private:
+	int Current;
 public:
 
 	enum {
-		INTRO = 0, MENU = 1, INGAME = 2, OPTIONS = 3, GAMECREATION = 4, CREDITS = 5, ERROR, SUCCESS
+		INTRO = 0,
+		MENU = 1,
+		INGAME = 2,
+		OPTIONS = 3,
+		GAMECREATION = 4,
+		CREDITS = 5,
+		ERROR,
+		SUCCESS
 	};
 
 	virtual ~Window() {
@@ -28,6 +37,14 @@ public:
 	virtual int Render(sf::Window*) = 0;
 
 	virtual void Clear() = 0;
+
+	virtual int getCurrent() {
+		return this->Current;
+	}
+
+	virtual void setCurrent(int Current) {
+		this->Current = Current;
+	}
 
 };
 

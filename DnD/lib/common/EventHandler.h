@@ -9,6 +9,7 @@
 #define EVENTHANDLER_H_
 
 #include <SFML/Window.hpp>
+#include <iostream>
 #include <string>
 
 class EventHandler {
@@ -17,6 +18,7 @@ public:
 	virtual ~EventHandler() {
 	}
 	;
+
 	virtual void Closed() = 0;
 
 	virtual void Resized(unsigned int Width, unsigned int Height) =0;

@@ -11,7 +11,7 @@
 #include "../common/Window.h"
 #include "../common/EventHandler.h"
 
-class Credits: public Window{
+class Credits: public Window {
 private:
 public:
 
