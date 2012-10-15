@@ -9,27 +9,77 @@
 #define INTRO_H_
 
 #include "../common/Window.h"
+#include "../common/EventHandler.h"
+#include <iostream>
 
-class Intro: public Window{
+class Intro: public Window {
 private:
 public:
 
-	bool Load(){
+	bool Load() {
 		return true;
 	}
 
-	void Loop(){
+	int Loop() {
+		return Window::INTRO;
+	}
+
+	int Render(sf::Window* App) {
+		return 0;
+	}
+
+	void Clear() {
 
 	}
 
-	void Render(){
+	void Closed() {
+	}
+
+	void Resized(unsigned int Width, unsigned int Height) {
 
 	}
 
-	void Clear(){
-
+	void LostFocus() {
 	}
+
+	void GainedFocus() {
+	}
+
+	void TextEntered(uint32_t UnicodeText) {
+	}
+
+	void KeyPressed(sf::Key::Code Code, bool Alt, bool Ctrl, bool Shift) throw (int){
+		if(Code == sf::Key::Space){
+			std::cout << "Lanza "<<Window::MENU << std::endl;
+			throw Window::MENU;
+
+
+		}
+	}
+
+	void KeyReleased(sf::Key::Code Code, bool Alt, bool Ctrl, bool Shift) {
+	}
+
+	void MouseWheelMoved(int Delta) {
+	}
+
+	void MouseButtonPressed(sf::Mouse::Button Button, unsigned int X,
+			unsigned int Y) {
+	}
+
+	void MouseButtonReleased(sf::Mouse::Button Button, unsigned int X,
+			unsigned int Y) {
+	}
+
+	void MouseMoved(int X, int Y) {
+	}
+
+	void MouseEntered() {
+	}
+
+	void MouseLeft() {
+	}
+
 };
-
 
 #endif /* INTRO_H_ */

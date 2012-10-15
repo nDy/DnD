@@ -8,11 +8,14 @@
 #ifndef WINDOW_H_
 #define WINDOW_H_
 
-class Window {
+#include "EventHandler.h"
+#include <SFML/Window.hpp>
+
+class Window : virtual public EventHandler{
 public:
 
 	enum {
-		INTRO, MENU, INGAME, OPTIONS, GAMECREATION, CREDITS
+		INTRO = 0, MENU = 1, INGAME = 2, OPTIONS = 3, GAMECREATION = 4, CREDITS = 5, ERROR, SUCCESS
 	};
 
 	virtual ~Window() {
@@ -20,9 +23,9 @@ public:
 
 	virtual bool Load() = 0;
 
-	virtual void Loop() = 0;
+	virtual int Loop() = 0;
 
-	virtual void Render() = 0;
+	virtual int Render(sf::Window*) = 0;
 
 	virtual void Clear() = 0;
 
