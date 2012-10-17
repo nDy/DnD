@@ -16,6 +16,7 @@ private:
 public:
 
 	bool Load() {
+		this->setCurrent(Window::MENU);
 		return true;
 	}
 
@@ -49,6 +50,10 @@ public:
 	}
 
 	void KeyPressed(sf::Key::Code Code, bool Alt, bool Ctrl, bool Shift) {
+		if (Code == sf::Key::Space) {
+			this->setCurrent(Window::INTRO);
+		}
+		std::cout<<"a Intro"<<std::endl;
 	}
 
 	void KeyReleased(sf::Key::Code Code, bool Alt, bool Ctrl, bool Shift) {

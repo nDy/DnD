@@ -42,8 +42,8 @@ public:
 		return this->Current;
 	}
 
-	virtual void setCurrent(int Current) {
-		this->Current = Current;
+	virtual void setCurrent(int c) {
+		this->Current = c;
 	}
 
 };

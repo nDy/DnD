@@ -64,7 +64,6 @@ public:
 				}
 			}
 
-			this->Current = windows[Window::INTRO]->Loop();
 			if (this->Current == Window::ERROR)
 				return DnD::ERROR;
 			else
@@ -84,7 +83,6 @@ public:
 				}
 			}
 
-			this->Current = windows[Window::MENU]->Loop();
 			if (this->Current == Window::ERROR)
 				return DnD::ERROR;
 			else
@@ -102,7 +100,6 @@ public:
 				}
 			}
 
-			this->Current = windows[Window::INGAME]->Loop();
 			if (this->Current == Window::ERROR)
 				return DnD::ERROR;
 			else
@@ -128,22 +125,20 @@ public:
 		return 0;
 	}
 
-	void Event(sf::Event e) throw (int) {
-		try {
-			switch (this->Current) {
-			case Window::INTRO:
-				windows[Window::INTRO]->Event(e);
-				break;
-			case Window::MENU:
-				windows[Window::MENU]->Event(e);
-				break;
-			case Window::INGAME:
-				windows[Window::INGAME]->Event(e);
-				break;
-			}
-		} catch (int e) {
-			throw e;
+	void Event(sf::Event e) {
+
+		switch (this->Current) {
+		case Window::INTRO:
+			windows[Window::INTRO]->Event(e);
+			break;
+		case Window::MENU:
+			windows[Window::MENU]->Event(e);
+			break;
+		case Window::INGAME:
+			windows[Window::INGAME]->Event(e);
+			break;
 		}
+
 	}
 
 	void Clear() {
@@ -161,7 +156,11 @@ public:
 			while (App->GetEvent(Event)) {
 
 				this->Event(Event);
-				this->Current = windows[this->Current]->getCurrent();
+
+				if (this->Current != windows[this->Current]->getCurrent()) {
+					this->Current = windows[this->Current]->getCurrent();
+					windows[this->Current]->setCurrent(this->Current);
+				}
 
 				if (Event.Type == sf::Event::Closed) {
 					this->Clear();
