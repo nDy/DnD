@@ -33,10 +33,13 @@ public:
 
 	DnD() {
 		App = new sf::Window();
-		windows = new Window*[3];
+		windows = new Window*[6];
 		windows[Window::INTRO] = new Intro();
 		windows[Window::MENU] = new Menu();
 		windows[Window::OPTIONS] = new Options();
+		windows[Window::GAMECREATION] = new GameCreation();
+		windows[Window::INGAME] = new InGame();
+		windows[Window::CREDITS] = new Credits();
 		this->Current = Window::INTRO;
 	}
 
@@ -63,12 +66,6 @@ public:
 					return Window::INTRO;
 				}
 			}
-
-			if (this->Current == Window::ERROR)
-				return DnD::ERROR;
-			else
-				return DnD::SUCCESS;
-
 			break;
 
 		case Window::MENU:
@@ -82,11 +79,6 @@ public:
 					return Window::MENU;
 				}
 			}
-
-			if (this->Current == Window::ERROR)
-				return DnD::ERROR;
-			else
-				return DnD::SUCCESS;
 			break;
 		case Window::INGAME:
 			if (windows[Window::INGAME] == NULL) {
@@ -99,14 +91,49 @@ public:
 					return Window::INGAME;
 				}
 			}
+			break;
 
-			if (this->Current == Window::ERROR)
-				return DnD::ERROR;
-			else
-				return DnD::SUCCESS;
+		case Window::OPTIONS:
+			if (windows[Window::OPTIONS] == NULL) {
+				windows[Window::OPTIONS] = new Intro();
+
+				if (!windows[Window::OPTIONS]->Load()) {
+					windows[Window::OPTIONS]->Clear();
+					windows[Window::OPTIONS] = NULL;
+					this->Clear();
+					return Window::OPTIONS;
+				}
+			}
+			break;
+		case Window::GAMECREATION:
+			if (windows[Window::GAMECREATION] == NULL) {
+				windows[Window::GAMECREATION] = new Intro();
+
+				if (!windows[Window::GAMECREATION]->Load()) {
+					windows[Window::GAMECREATION]->Clear();
+					windows[Window::GAMECREATION] = NULL;
+					this->Clear();
+					return Window::GAMECREATION;
+				}
+			}
+			break;
+		case Window::CREDITS:
+			if (windows[Window::CREDITS] == NULL) {
+				windows[Window::CREDITS] = new Intro();
+
+				if (!windows[Window::CREDITS]->Load()) {
+					windows[Window::CREDITS]->Clear();
+					windows[Window::CREDITS] = NULL;
+					this->Clear();
+					return Window::CREDITS;
+				}
+			}
 			break;
 		}
-		return DnD::ERROR;
+		if (this->Current == Window::ERROR)
+			return DnD::ERROR;
+		else
+			return DnD::SUCCESS;
 	}
 
 	int Render() {
@@ -118,6 +145,15 @@ public:
 			windows[Window::MENU]->Render(App);
 			break;
 		case Window::INGAME:
+			windows[Window::INGAME]->Render(App);
+			break;
+		case Window::OPTIONS:
+			windows[Window::INGAME]->Render(App);
+			break;
+		case Window::GAMECREATION:
+			windows[Window::INGAME]->Render(App);
+			break;
+		case Window::CREDITS:
 			windows[Window::INGAME]->Render(App);
 			break;
 		}
@@ -135,6 +171,15 @@ public:
 			windows[Window::MENU]->Event(e);
 			break;
 		case Window::INGAME:
+			windows[Window::INGAME]->Event(e);
+			break;
+		case Window::OPTIONS:
+			windows[Window::INGAME]->Event(e);
+			break;
+		case Window::GAMECREATION:
+			windows[Window::INGAME]->Event(e);
+			break;
+		case Window::CREDITS:
 			windows[Window::INGAME]->Event(e);
 			break;
 		}
@@ -158,8 +203,10 @@ public:
 				this->Event(Event);
 
 				if (this->Current != windows[this->Current]->getCurrent()) {
-					this->Current = windows[this->Current]->getCurrent();
+					int oldCurrent = this->Current;
+					this->Current = windows[oldCurrent]->getCurrent();
 					windows[this->Current]->setCurrent(this->Current);
+					//Liberar memoria de windows[oldCurrent]
 				}
 
 				if (Event.Type == sf::Event::Closed) {

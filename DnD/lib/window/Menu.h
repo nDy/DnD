@@ -53,7 +53,6 @@ public:
 		if (Code == sf::Key::Space) {
 			this->setCurrent(Window::INTRO);
 		}
-		std::cout<<"a Intro"<<std::endl;
 	}
 
 	void KeyReleased(sf::Key::Code Code, bool Alt, bool Ctrl, bool Shift) {
