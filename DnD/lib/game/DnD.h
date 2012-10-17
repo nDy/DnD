@@ -80,6 +80,7 @@ public:
 				}
 			}
 			break;
+
 		case Window::INGAME:
 			if (windows[Window::INGAME] == NULL) {
 				windows[Window::INGAME] = new InGame();
@@ -105,6 +106,7 @@ public:
 				}
 			}
 			break;
+
 		case Window::GAMECREATION:
 			if (windows[Window::GAMECREATION] == NULL) {
 				windows[Window::GAMECREATION] = new Intro();
@@ -117,6 +119,7 @@ public:
 				}
 			}
 			break;
+
 		case Window::CREDITS:
 			if (windows[Window::CREDITS] == NULL) {
 				windows[Window::CREDITS] = new Intro();
@@ -129,7 +132,9 @@ public:
 				}
 			}
 			break;
+
 		}
+
 		if (this->Current == Window::ERROR)
 			return DnD::ERROR;
 		else
