@@ -24,11 +24,6 @@ public:
 		this->stepOpver = true;
 	}
 
-	bool moveTo(int X, int Y) {
-		//Mover a XY
-		return true;
-	}
-
 	void setActive(bool Active) {
 		this->active = Active;
 	}
@@ -39,6 +34,12 @@ public:
 
 	int getPosY() {
 		return this->y;
+	}
+	void setPosX(int X) {
+		this->x = X;
+	}
+	void setPosY(int Y) {
+		this->y = Y;
 	}
 
 };
