@@ -13,7 +13,8 @@ private:
 	int x;
 	int y;
 	bool active;
-	bool stepOpver;
+	bool step;
+	bool lookOver; // para ver sobre , a traves de ellos
 	short int bodyType;
 
 public:
@@ -21,7 +22,7 @@ public:
 		this->x = X;
 		this->y = Y;
 		this->active = true;
-		this->stepOpver = true;
+		this->step = true;
 	}
 
 	void setActive(bool Active) {
@@ -40,6 +41,10 @@ public:
 	}
 	void setPosY(int Y) {
 		this->y = Y;
+	}
+
+	bool stepOver() {
+		return this->step;
 	}
 
 };

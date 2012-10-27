@@ -12,12 +12,12 @@
 
 class ImageHandler {
 public:
+	virtual ~ImageHandler();
 	virtual sf::Image LoadImage(char* filename) {
 		sf::Image image;
 
-		if (!image.LoadFromFile(filename))
-		{
-		    //return NULL;
+		if (!image.LoadFromFile(filename)) {
+			//return NULL;
 		}
 
 		return image;

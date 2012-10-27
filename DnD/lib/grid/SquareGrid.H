@@ -32,10 +32,12 @@ public:
 	}
 
 	Body*& getBody(int x, int y) {
-			return this->grid[x][y]->upon();
+		return this->grid[x][y]->upon();
 	}
 
 	bool switchPointers(int startX, int startY, int finishX, int finishY) {
+		if (!grid[finishX][finishY]->stepOver())
+			return false;
 		if (grid[finishX][finishY]->upon() != NULL) {
 			return false;
 		}
