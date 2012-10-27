@@ -8,30 +8,43 @@
 #ifndef SQUAREGRID_H_
 #define SQUAREGRID_H_
 
-#include "../bodies/Body.h"
+#include "../bodies/Terrain.h"
 
 class SquareGrid {
 private:
-	Body*** grid;
+	Terrain*** grid;
 public:
-	enum {STDWIDTH=20,STDHEIGHT=10};
+	enum {
+		STDWIDTH = 20, STDHEIGHT = 10
+	};
 	SquareGrid() {
 
-		std::cout<<"Entra al constructor "<<std::endl;
-		grid = new Body**[STDWIDTH];
+		std::cout << "Entra al constructor " << std::endl;
+		grid = new Terrain**[STDWIDTH];
 
-		std::cout<<"Crea el vector de punteros dobles "<<std::endl;
+		std::cout << "Crea el vector de punteros dobles " << std::endl;
 		for (int var = 0; var < STDWIDTH; ++var) {
-			grid[var] = new Body *[STDHEIGHT];
+			grid[var] = new Terrain *[STDHEIGHT];
 			for (int vartwo = 0; vartwo < STDHEIGHT; ++vartwo) {
-				grid[var][vartwo] = new Body(var, vartwo);
+				grid[var][vartwo] = new Terrain(var, vartwo);
 			}
 		}
 	}
 
-	Body* getBody(int x, int y){
-		return grid[x][y];
+	Body*& getBody(int x, int y) {
+			return this->grid[x][y]->upon();
 	}
+
+	bool switchPointers(int startX, int startY, int finishX, int finishY) {
+		if (grid[finishX][finishY]->upon() != NULL) {
+			return false;
+		}
+		grid[finishX][finishY]->upon() = grid[startX][startY]->upon();
+
+		grid[startX][startY]->upon() = NULL;
+		return true;
+	}
+
 };
 
 #endif /* SQUAREGRID_H_ */
