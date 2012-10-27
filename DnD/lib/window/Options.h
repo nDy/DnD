@@ -22,7 +22,7 @@ public:
 		return 0;
 	}
 
-	int Render(sf::Window* App) {
+	int Render(sf::RenderWindow* App) {
 		return 0;
 	}
 

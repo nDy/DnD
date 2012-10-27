@@ -9,10 +9,10 @@
 #define INGAME_H_
 
 #include "../common/Window.h"
+#include "../common/ImageHandler.h"
 
-class InGame: public Window{
+class InGame: public Window {
 public:
-
 	bool Load() {
 		return true;
 	}
@@ -21,7 +21,7 @@ public:
 		return 0;
 	}
 
-	int Render(sf::Window* App) {
+	int Render(sf::RenderWindow* App) {
 		return 0;
 	}
 

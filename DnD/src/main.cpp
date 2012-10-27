@@ -6,13 +6,29 @@
 //============================================================================
 
 #include "../lib/game/DnD.h"
+#include "../lib/bodies/Body.h"
+#include "../lib/grid/SquareGrid.H"
+#include <iostream>
 
 int main(int argc, char **argv) {
 
-	DnD* Game;
+	SquareGrid* grid;
+	std::cout<<"Se crea el puntero "<<std::endl;
+	grid = new SquareGrid();
+	std::cout<<"Se instancia el grid "<<std::endl;
 
-	Game = new DnD();
+	for (int var = 0; var < 20; ++var) {
+		for (int vartwo = 0; vartwo < 10; ++vartwo) {
+			std::cout<<"Cuerpo que se supone debe estar en "<<var<<" "<<vartwo<<std::endl;
+			std::cout<<"Se encuentra en "<<grid->getBody(var,vartwo)->getPosX()<<" "<<grid->getBody(var,vartwo)->getPosY()<<std::endl;
+		}
+	}
 
-	return Game->Execute();
+	/*
+	 DnD* Game;
 
+	 Game = new DnD();
+
+	 return Game->Execute();
+	 */
 }

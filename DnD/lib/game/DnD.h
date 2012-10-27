@@ -15,14 +15,14 @@
 #include "../window/Intro.h"
 #include "../window/Menu.h"
 #include "../window/Options.h"
-#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
 
 class DnD {
 private:
 
 	int Current;
 	bool Running;
-	sf::Window* App;
+	sf::RenderWindow* App;
 	Window** windows;
 
 public:
@@ -32,7 +32,7 @@ public:
 	};
 
 	DnD() {
-		App = new sf::Window();
+		App = new sf::RenderWindow();
 		windows = new Window*[6];
 		windows[Window::INTRO] = new Intro();
 		windows[Window::MENU] = new Menu();
@@ -142,6 +142,7 @@ public:
 	}
 
 	int Render() {
+		this->App->Clear();
 		switch (this->Current) {
 		case Window::INTRO:
 			windows[Window::INTRO]->Render(App);

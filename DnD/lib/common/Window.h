@@ -9,7 +9,7 @@
 #define WINDOW_H_
 
 #include "EventHandler.h"
-#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
 
 class Window: virtual public EventHandler {
 private:
@@ -34,7 +34,7 @@ public:
 
 	virtual int Loop() = 0;
 
-	virtual int Render(sf::Window*) = 0;
+	virtual int Render(sf::RenderWindow*) = 0;
 
 	virtual void Clear() = 0;
 

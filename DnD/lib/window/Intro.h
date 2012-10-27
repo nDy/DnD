@@ -26,7 +26,7 @@ public:
 		return Window::INTRO;
 	}
 
-	int Render(sf::Window* App) {
+	int Render(sf::RenderWindow* App) {
 		return 0;
 	}
 
