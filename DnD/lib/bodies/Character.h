@@ -156,7 +156,26 @@ public:
 				}
 			}
 		}
-		//ordenar listas de acuerdo a prioridad, no a posicion
+		//ordenar
+		for (int i = 0; i < listSize; ++i) {
+			for (int j = i + 1; j < listSize; ++j) {
+				if (priorityList[i] > priorityList[j])
+					for (int k = j; k > 0; --k) {
+						double temp = priorityList[k];
+						int tempx = priorityPositionList[k][0];
+						int tempy = priorityPositionList[k][1];
+						priorityList[k] = priorityList[k - 1];
+						priorityPositionList[k][0] =
+								priorityPositionList[k - 1][0];
+						priorityPositionList[k][1] =
+								priorityPositionList[k - 1][1];
+						priorityList[k - 1] = temp;
+						priorityPositionList[k - 1][0] = tempx;
+						priorityPositionList[k - 1][1] = tempy;
+					}
+			}
+		}
+
 		//Aplicar __getAstarPath al nodo con mayor prioridad
 		//agregar x y y al camino
 	}
