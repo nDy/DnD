@@ -36,6 +36,21 @@ public:
 		return true;
 	}
 
+	void __getAstarPath(int**,int x, int y){
+		//Revisar prioridad
+		//Aplicar __getAstarPath al nodo con mayor prioridad
+		//agregar x y y al camino
+	}
+
+	int** getAstarPath() {
+		int** path;
+
+
+
+
+		return path;
+	}
+
 };
 
 #endif /* CHARACTER_H_ */
