@@ -13,13 +13,16 @@ class Terrain: public Body {
 private:
 	int Type;
 	Body* onTop;
+	bool visited;
 public:
 	enum {
 		PLAIN, DIFFICULT
 	};
 
-	Terrain(int X, int Y):Body(X,Y) {
-
+	Terrain(int X, int Y) :
+			Body(X, Y) {
+		this->onTop = NULL;
+		this->visited = false;
 	}
 
 	void setType(int type) {
@@ -28,6 +31,18 @@ public:
 
 	Body*& upon() {
 		return this->onTop;
+	}
+
+	void clearVisited() {
+		this->visited = false;
+	}
+
+	void visit() {
+		this->visited = true;
+	}
+
+	bool wasVisited() {
+		return this->visited;
 	}
 
 };

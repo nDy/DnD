@@ -19,10 +19,8 @@ public:
 	};
 	SquareGrid() {
 
-		std::cout << "Entra al constructor " << std::endl;
 		grid = new Terrain**[STDWIDTH];
 
-		std::cout << "Crea el vector de punteros dobles " << std::endl;
 		for (int var = 0; var < STDWIDTH; ++var) {
 			grid[var] = new Terrain *[STDHEIGHT];
 			for (int vartwo = 0; vartwo < STDHEIGHT; ++vartwo) {
@@ -33,6 +31,10 @@ public:
 
 	Body*& getBody(int x, int y) {
 		return this->grid[x][y]->upon();
+	}
+
+	Terrain*& getTerrain(int x, int y) {
+		return this->grid[x][y];
 	}
 
 	bool switchPointers(int startX, int startY, int finishX, int finishY) {
