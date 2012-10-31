@@ -37,7 +37,8 @@ public:
 		return true;
 	}
 
-	void __getAstarPath(int**, int X, int Y, int goalX, int goalY, int size) {
+	void __getAstarPath(int**path, int X, int Y, int goalX, int goalY,
+			int size) {
 		int listSize;
 		int** priorityPositionList;
 		double* priorityList;
@@ -176,13 +177,26 @@ public:
 			}
 		}
 
-		//Aplicar __getAstarPath al nodo con mayor prioridad
-		//agregar x y y al camino
+		if (priorityList[0] == 0) {
+			path = new int[size][2];
+			path[size - 1][0] = priorityPositionList[0][0];
+			path[size - 1][1] = priorityPositionList[0][1];
+		} else {
+			for (int var = 0; var < pos; ++var) {
+				__getAstarPath(path, priorityPositionList[var][0],
+						priorityPositionList[var][1], goalX, goalY, size + 1);
+				if (path != NULL) {
+					path[size - 1][0] = priorityPositionList[var][0];
+					path[size - 1][1] = priorityPositionList[var][1];
+					break;
+				}
+			}
+		}
 	}
 
-	int** getAstarPath() {
+	int** getAstarPath(int X, int Y) {
 		int** path;
-
+		__getAstarPath(path, this->getPosX(), this->getPosY(), X, Y, 0);
 		return path;
 	}
 
