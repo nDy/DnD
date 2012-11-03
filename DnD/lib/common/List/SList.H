@@ -6,98 +6,79 @@
 
 using namespace std;
 
+template<class T> class SList: public SNode<T> {
+private:
+	SNode<T>* first; //Puntero al siguiente Nodo
 
-template<class T> class SList: public SNode<T>{
+public:
 
-	
-	public:
-		
-	SNode<T> Node;				//Puntero al siguiente Nodo
-	
-	SList(){};
-	
-	~SList(){};
+	SList() {
+	}
+	;
+
+	~SList() {
+	}
+	;
+
+	//insertar odenado siguiendo el criterio de menor a mayor
+	void OrderedInsertion(SNode<T> *node) {
+		if (this->first == NULL) {
+			this->first = node;
+		} else {
+			SNode<T> * aux;
+			SNode<T> * aux2;
+			aux = first;
+			aux2 = NULL;
+			while (aux != aux->getNext()) {
+				if (node->data < aux->data) {
+					break;
+				}
+				aux2 = aux;
+				aux = aux->getNext();
+			}
+
+			if (aux2 == NULL)
+				this->insertFirst(node);
+			else
+				aux2->insertNext(node);
+
+		}
+	}
 
 	//Insertar un elemento al inicio
-	void insertFirst(SNode<T> *node){
-		Node.insertNext(node);	
-	};
+	void insertFirst(SNode<T> *node) {
+		if (first == NULL) {
+			first = node;
+			first->next = first; // mecanismo de seguridad para evitar insertar una lista
+			return;
+		}
+		node->getNext() = first;
+		first = node;
+	}
+	;
 
-	//devuelve el Primer elemento de la lista
-	SNode<T>* getFirst(){
-		return Node.getNext();
-	};
-	
-	//remueve el primer elemento de la lista
-	SNode<T>* removeFirst(){
-		return Node.removeNext();
-	};
-	
-	//insertar odenado siguiendo el criterio de menor a mayor
-	void orderedInsert(SNode<T> * node){
-		Node.OrderedInsertion(node);
-	};
+//devuelve el Primer elemento de la lista
+	SNode<T>* getFirst() {
+		return first;
+	}
+	;
 
-	//obtener Node
-	SNode<T>& getNode(){
-		return Node;
-	};
-	
-	//verifica si la lista esta vacia
-	bool isEmpty(){
-		return Node->isEmpty();
-	};
+//remueve el primer elemento de la lista
+	SNode<T>* removeFirst() {
+		SNode<T>* aux = first;
+		if (first->next == first) { //Si el primero es el ultimo de la lista
 
+			first = NULL; // Se vacia la lista
+		} else {
 
-	/*Clase Iterador que permite el manejo de la lista*/
+			first = first->next; // Se coloca de cabecera de lista al segundo nodo
 
-
-	class Iterator{
-
-		private:
-			
-			SList<T> * list;
-			
-			SNode<T> * current;
-		public:
-
-			//constructor por copia
-			Iterator(SList<T> & l){
-				list = &l;
-				current=list->getFirst();
-			};
-
-			//permiteverificar si todavia faltan elementos por revisar
-			bool hasCurrent(){ 
-				return current != &list->getNode(); 
-			};
-	
-			//obtener el nodo en el que se encuentra posicionado actualmente
-			SNode<T> * getCurrent(){
-				if ( !this->hasCurrent())
-					return NULL;
-
-				return current;
-			};
-
-			//me posiciona en el siguiente elemento de la lista
-			void next(){
-				current = current->getNext();
-			};
-
-			//resetea el Iterador con el primer elemento de la lista
-			void resetFirst() { 
-				current = list->getNext(); 
-			};
-			
-
-	};//fin clase Iterator
-
-
-
-
-};//fin clase SList
-
-
+		}
+		return aux; // Se retorna el nodo que se elimina de la lista
+	}
+	;
+}
+;
+//fin clase SList
 
 #endif 
