@@ -6,7 +6,7 @@
 
 using namespace std;
 
-template<class T> class SList: public SNode<T> {
+template<class T> class SList{
 private:
 	SNode<T>* first; //Puntero al siguiente Nodo
 
