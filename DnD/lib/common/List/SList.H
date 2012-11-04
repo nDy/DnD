@@ -6,7 +6,7 @@
 
 using namespace std;
 
-template<class T> class SList{
+template<class T> class SList {
 private:
 	SNode<T>* first; //Puntero al siguiente Nodo
 
@@ -14,14 +14,12 @@ public:
 
 	SList() {
 	}
-	;
 
 	~SList() {
 	}
-	;
 
 	//insertar odenado siguiendo el criterio de menor a mayor
-	void OrderedInsertion(SNode<T> *node) {
+	void OrderedInsertion(SNode<T> *&node) {
 		if (this->first == NULL) {
 			this->first = node;
 		} else {
@@ -45,26 +43,39 @@ public:
 		}
 	}
 
-	//Insertar un elemento al inicio
-	void insertFirst(SNode<T> *node) {
+	SNode<T> * search(SNode<T> *& node) {
+		SNode<T> * aux;
+		aux = this->first;
+		do {
+			if (aux == node) {
+				return aux;
+			} else {
+				aux = aux->getNext();
+			}
+		} while (aux != aux->getNext());
+		return NULL;
+	}
+
+//Insertar un elemento al inicio
+	void insertFirst(SNode<T>*& node) {
 		if (first == NULL) {
 			first = node;
-			first->next = first; // mecanismo de seguridad para evitar insertar una lista
+			first->setNext(first); // mecanismo de seguridad para evitar insertar una lista
 			return;
 		}
-		node->getNext() = first;
+		node->setNext(first);
 		first = node;
 	}
 	;
 
 //devuelve el Primer elemento de la lista
-	SNode<T>* getFirst() {
+	SNode<T>*& getFirst() {
 		return first;
 	}
 	;
 
 //remueve el primer elemento de la lista
-	SNode<T>* removeFirst() {
+	SNode<T>*& removeFirst() {
 		SNode<T>* aux = first;
 		if (first->next == first) { //Si el primero es el ultimo de la lista
 

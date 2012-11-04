@@ -24,10 +24,30 @@ private:
 public:
 
 	//Constructor por omision
-	Arc(GT* startNode, GT* endNode, LT* cost = NULL) {
+	Arc(GT* startNode, GT* endNode, LT cost) {
 		this->arcData = cost;
 		this->start = startNode;
 		this->end = endNode;
+	}
+
+	GT *& getStart() {
+		return this->start;
+	}
+
+	GT *& getEnd() {
+		return this->end;
+	}
+
+	LT getCost() {
+		return this->arcData;
+	}
+
+	void setCost(LT Cost) {
+		this->arcData = Cost;
+	}
+
+	bool operator>(const Arc<GT, LT>*& c) const {
+		return this->arcData > c->arcData;
 	}
 
 };

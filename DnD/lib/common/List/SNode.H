@@ -26,6 +26,11 @@ public:
 		this->data = node->data;
 		this->next = node->next;
 	}
+
+	SNode(SNode<T> *& node) {
+		this->data = node->data;
+		this->next = node->next;
+	}
 	//destructor por omision
 	~SNode() {
 	}
@@ -36,7 +41,7 @@ public:
 	}
 
 	//Obtener el valor de dato
-	T& getData() {
+	T*& getData() {
 		return data;
 	}
 	//reseteamos el valor del nodo
@@ -51,6 +56,9 @@ public:
 	//obtener el siguiente nodo
 	SNode<T>* getNext() {
 		return next;
+	}
+	void setNext(SNode<T>* Next) {
+		next = Next;
 	}
 
 	//inserto un nodo despues de este
