@@ -2,8 +2,6 @@
 #define SNODE_H
 #include <iostream>
 
-using namespace std;
-
 template<class T> class SNode {
 private:
 	T* data; //Dato a almacenar en el nodo
@@ -36,9 +34,13 @@ public:
 	}
 	;
 	//Constructor por copia
-	SNode(const T & dat) {
-		data = &dat;
+	SNode(T & dat) {
+		this->data = &dat;
 	}
+
+	SNode(T *& dat) {
+			this->data = dat;
+		}
 
 	//Obtener el valor de dato
 	T*& getData() {

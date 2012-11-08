@@ -4,19 +4,15 @@
 #include <iostream>
 #include "SNode.H"
 
-using namespace std;
-
 template<class T> class SList {
 private:
 	SNode<T>* first; //Puntero al siguiente Nodo
 
 public:
 
-	SList() {
-	}
+	SList(){}
 
-	~SList() {
-	}
+	~SList(){}
 
 	//insertar odenado siguiendo el criterio de menor a mayor
 	void OrderedInsertion(SNode<T> *&node) {
@@ -29,6 +25,30 @@ public:
 			aux2 = NULL;
 			while (aux != aux->getNext()) {
 				if (node->data < aux->data) {
+					break;
+				}
+				aux2 = aux;
+				aux = aux->getNext();
+			}
+
+			if (aux2 == NULL)
+				this->insertFirst(node);
+			else
+				aux2->insertNext(node);
+
+		}
+	}
+
+	void OrderedInsertion(SNode<T> *node) {
+		if (this->first == NULL) {
+			this->first = node;
+		} else {
+			SNode<T> * aux;
+			SNode<T> * aux2;
+			aux = first;
+			aux2 = NULL;
+			while (aux != aux->getNext()) {
+				if (node->getData() < aux->getData()) {
 					break;
 				}
 				aux2 = aux;

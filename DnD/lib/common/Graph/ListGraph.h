@@ -18,8 +18,11 @@ private:
 	SList<GraphNode<GT, ATC> > * graph;
 public:
 	void insertNode(GraphNode<GT, ATC>*& node) {
-		SNode<GT> newNode(node->getData());
-		graph->insertFirst(&newNode);
+
+		std::cout << "entra al insertNode "<< std::endl;
+		SNode<GraphNode<GT, ATC> > * aux;
+		aux = new SNode<GraphNode<GT, ATC> >(node);
+		graph->insertFirst(aux);
 	}
 
 	void insertArc(Arc<GT, ATC>* arc) {

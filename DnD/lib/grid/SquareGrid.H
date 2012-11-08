@@ -13,6 +13,8 @@
 class SquareGrid {
 private:
 	Terrain*** grid;
+	int width;
+	int height;
 public:
 	enum {
 		STDWIDTH = 20, STDHEIGHT = 10
@@ -21,12 +23,24 @@ public:
 
 		grid = new Terrain**[STDWIDTH];
 
+		width = STDWIDTH;
+		height = STDHEIGHT;
+
 		for (int var = 0; var < STDWIDTH; ++var) {
 			grid[var] = new Terrain *[STDHEIGHT];
 			for (int vartwo = 0; vartwo < STDHEIGHT; ++vartwo) {
 				grid[var][vartwo] = new Terrain(var, vartwo);
 			}
 		}
+
+	}
+
+	int getWidth() {
+		return this->width;
+	}
+
+	int getHeight() {
+		return this->height;
 	}
 
 	Body*& getBody(int x, int y) {
