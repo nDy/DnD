@@ -76,6 +76,206 @@ public:
 			//arriba izquierda
 			if ((currentX > 0) && (currentY > 0)
 					&& (this->grid->getBody(currentX - 1, currentY - 1) == NULL)
+					&& this->grid->getTerrain(currentX - 1, currentY - 1)->stepOver()
+					&& !this->grid->getTerrain(currentX - 1, currentY - 1)->wasVisited()) {
+				//meter a la lista abierta
+				this->grid->getTerrain(currentX - 1, currentY - 1)->visit();
+				node pos;
+				pos.x = currentX - 1;
+				pos.y = currentY - 1;
+				pos.parentX = currentX;
+				pos.parentY = currentY;
+				pos.length = pathlength;
+				pos.eliminated = false;
+				open_list.push_back(pos);
+
+			}
+			//arriba
+			if ((currentY > 0)
+					&& (this->grid->getBody(currentX, currentY - 1) == NULL)
+					&& this->grid->getTerrain(currentX, currentY - 1)->stepOver()
+					&& !this->grid->getTerrain(currentX, currentY - 1)->wasVisited()) {
+				//meter a la lista abierta
+				this->grid->getTerrain(currentX, currentY - 1)->visit();
+				node pos;
+				pos.x = currentX;
+				pos.y = currentY - 1;
+				pos.parentX = currentX;
+				pos.parentY = currentY;
+				pos.length = pathlength;
+				pos.eliminated = false;
+				open_list.push_back(pos);
+			}
+			//arriba derecha
+			if ((currentX < this->grid->getWidth()) && (currentY > 0)
+					&& (this->grid->getBody(currentX + 1, currentY - 1) == NULL)
+					&& this->grid->getTerrain(currentX + 1, currentY - 1)->stepOver()
+					&& !this->grid->getTerrain(currentX + 1, currentY - 1)->wasVisited()) {
+				//meter a la lista abierta
+				this->grid->getTerrain(currentX + 1, currentY - 1)->visit();
+				node pos;
+				pos.x = currentX + 1;
+				pos.y = currentY - 1;
+				pos.parentX = currentX;
+				pos.parentY = currentY;
+				pos.length = pathlength;
+				pos.eliminated = false;
+				open_list.push_back(pos);
+
+			}
+
+			//derecha
+			if ((currentX < this->grid->getWidth())
+					&& (this->grid->getBody(currentX + 1, currentY) == NULL)
+					&& this->grid->getTerrain(currentX + 1, currentY)->stepOver()
+					&& !this->grid->getTerrain(currentX + 1, currentY)->wasVisited()) {
+				//meter a la lista abierta
+				this->grid->getTerrain(currentX + 1, currentY)->visit();
+				node pos;
+				pos.x = currentX - 1;
+				pos.y = currentY - 1;
+				pos.parentX = currentX;
+				pos.parentY = currentY;
+				pos.length = pathlength;
+				pos.eliminated = false;
+				open_list.push_back(pos);
+			}
+
+			//abajo derecha
+			if ((currentX < this->grid->getWidth())
+					&& (currentY < this->grid->getWidth())
+					&& (this->grid->getBody(currentX + 1, currentY + 1) == NULL)
+					&& this->grid->getTerrain(currentX + 1, currentY + 1)->stepOver()
+					&& !this->grid->getTerrain(currentX + 1, currentY + 1)->wasVisited()) {
+				//meter a la lista abierta
+				this->grid->getTerrain(currentX + 1, currentY + 1)->visit();
+				node pos;
+				pos.x = currentX + 1;
+				pos.y = currentY + 1;
+				pos.parentX = currentX;
+				pos.parentY = currentY;
+				pos.length = pathlength;
+				pos.eliminated = false;
+				open_list.push_back(pos);
+			}
+
+			//abajo
+			if ((currentY < this->grid->getHeight())
+					&& (this->grid->getBody(currentX, currentY + 1) == NULL)
+					&& this->grid->getTerrain(currentX, currentY + 1)->stepOver()
+					&& !this->grid->getTerrain(currentX, currentY + 1)->wasVisited()) {
+				//meter a la lista abierta
+				this->grid->getTerrain(currentX, currentY + 1)->visit();
+				node pos;
+				pos.x = currentX;
+				pos.y = currentY + 1;
+				pos.parentX = currentX;
+				pos.parentY = currentY;
+				pos.length = pathlength;
+				pos.eliminated = false;
+				open_list.push_back(pos);
+			}
+
+			//abajo izquierda
+			if ((currentX > 0) && (currentY < this->grid->getWidth())
+					&& (this->grid->getBody(currentX - 1, currentY + 1) == NULL)
+					&& this->grid->getTerrain(currentX - 1, currentY + 1)->stepOver()
+					&& !this->grid->getTerrain(currentX - 1, currentY + 1)->wasVisited()) {
+				//meter a la lista abierta
+				this->grid->getTerrain(currentX - 1, currentY + 1)->visit();
+				node pos;
+				pos.x = currentX - 1;
+				pos.y = currentY + 1;
+				pos.parentX = currentX;
+				pos.parentY = currentY;
+				pos.length = pathlength;
+				pos.eliminated = false;
+				open_list.push_back(pos);
+			}
+
+			//izquierda
+			if ((currentX > 0)
+					&& (this->grid->getBody(currentX - 1, currentY) == NULL)
+					&& this->grid->getTerrain(currentX - 1, currentY)->stepOver()
+					&& !this->grid->getTerrain(currentX - 1, currentY)->wasVisited()) {
+				//meter a la lista abierta
+				this->grid->getTerrain(currentX - 1, currentY)->visit();
+				node pos;
+				pos.x = currentX - 1;
+				pos.y = currentY;
+				pos.parentX = currentX;
+				pos.parentY = currentY;
+				pos.length = pathlength;
+				pos.eliminated = false;
+				open_list.push_back(pos);
+			}
+
+//revisar el que tenga la menor F de los que se encuentran en la lista abierta
+
+			node aux;
+			std::list<node>::iterator auxIterator = open_list.begin();
+
+			for (std::list<node>::iterator i = open_list.begin();
+					i != open_list.end(); ++i) {
+				if (!(*i).eliminated) {
+					if (i == open_list.begin()) {
+						aux = *i;
+					} else {
+						if ((*i).length
+								+ heuristic_function((*i).x, (*i).y, goalX,
+										goalY)
+								< aux.length
+										+ heuristic_function(aux.x, aux.y,
+												goalX, goalY)) {
+							aux = (*i);
+							auxIterator = i;
+						}
+					}
+				}
+			}
+
+			(*auxIterator).eliminated = true;
+
+			closed_list.push_back(*auxIterator);
+
+			if (heuristic_function(aux.x, aux.y, goalX, goalY) == 0)
+				break;
+			std::cout << closed_list.size() << std::endl;
+			currentX = aux.x;
+			currentY = aux.y;
+
+		}
+		return closed_list;
+	}
+
+	std::list<node> getAstarPath(int sourceX, int sourceY, int goalX,
+			int goalY) {
+
+		std::list<node> open_list;
+		std::list<node> closed_list;
+
+		int currentX = sourceX;
+		int currentY = sourceY;
+
+		node posA;
+		int pathlength = 0;
+
+		posA.x = currentX;
+		posA.y = currentY;
+		posA.parentX = currentX;
+		posA.parentY = currentY;
+		posA.length = pathlength;
+		posA.eliminated = false;
+
+		closed_list.push_back(posA);
+
+		while (1) {
+
+			pathlength++;
+
+			//arriba izquierda
+			if ((currentX > 0) && (currentY > 0)
+					&& (this->grid->getBody(currentX - 1, currentY - 1) == NULL)
 					&& this->grid->getTerrain(currentX - 1, currentY - 1)->stepOver()) {
 				if (!this->grid->getTerrain(currentX - 1, currentY - 1)->wasVisited()) {
 					//meter a la lista abierta
@@ -245,6 +445,7 @@ public:
 		}
 		return closed_list;
 	}
+
 }
 ;
 

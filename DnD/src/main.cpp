@@ -17,17 +17,17 @@ int main(int argc, char **argv) {
 	grid = new SquareGrid();
 
 	Character * player;
-	player = new Character(1, 1, grid);
+	player = new Character(5, 1, grid);
 
-	player->moveTo(3, 3);
-
-	std::list<Character::node> path = player->getAstarPath(8, 8);
-	if (path.empty()) {
-		std::cout << "Lista vacia" << std::endl;
-	} else {
-		std::cout << "Lista llena :D" << std::endl;
-	}
-
+	std::list<Character::node> path = player->getAstarPath(1, 6);
+	std::cout
+			<< "Al llenarse la lista del camino, se pueden ver en ella las propiedades que fueron declaradas"
+			<< std::endl;
+	std::cout
+			<< " en el vertice, en caso de querer revisar el padre de cada uno de los nodos podria hacerse usando"
+			<< std::endl;
+	std::cout << "el valor parentX y parent Y de la estructura node."
+			<< std::endl;
 	for (std::list<Character::node>::iterator i = path.begin(); i != path.end();
 			++i) {
 		std::cout << " Pos X " << (*i).x << " Pos Y " << (*i).y << std::endl;
@@ -87,3 +87,4 @@ int main(int argc, char **argv) {
 
  return Game->Execute();
  */
+//BUG!!!!!!!!!!! solo se encuentran caminos diagonales en linea recta.
