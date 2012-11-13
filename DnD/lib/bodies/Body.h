@@ -9,12 +9,12 @@
 #define BODY_H_
 
 class Body {
-/*
-Clase de cuerpo basico, se pueden crear a partir de esta,
-clases que se pueden instanciar en el mapa. Para rcaracteres
-que tienen uso de velocidad de movimiento y tienen una
-cantidad de hp, revisar Character.
-*/
+	/*
+	 Clase de cuerpo basico, se pueden crear a partir de esta,
+	 clases que se pueden instanciar en el mapa. Para rcaracteres
+	 que tienen uso de velocidad de movimiento y tienen una
+	 cantidad de hp, revisar Character.
+	 */
 
 private:
 	int x;
@@ -55,7 +55,9 @@ public:
 		return this->step;
 	}
 
-
+	void stepOver(bool stepOver) {
+		this->step = stepOver;
+	}
 
 };
 

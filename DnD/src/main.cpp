@@ -16,10 +16,14 @@ int main(int argc, char **argv) {
 	SquareGrid* grid;
 	grid = new SquareGrid();
 
+	grid->getTerrain(4,5)->stepOver(false);
+	grid->getTerrain(5,5)->stepOver(false);
+	grid->getTerrain(6,5)->stepOver(false);
+
 	Character * player;
 	player = new Character(5, 1, grid);
 
-	std::list<Character::node> path = player->getAstarPath(1, 6);
+	std::list<Character::node> path = player->getAstarPath(5, 7);
 	std::cout
 			<< "Al llenarse la lista del camino, se pueden ver en ella las propiedades que fueron declaradas"
 			<< std::endl;
