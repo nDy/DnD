@@ -45,8 +45,14 @@ public:
 		return true;
 	}
 
-	float heuristic_function(int currentX, int currentY, int goalX, int goalY) {
-		return sqrt(pow(currentX - goalX, 2) + pow(currentY - goalY, 2));
+	float heuristic_function(int startX, int startY, int currentX, int currentY,
+			int goalX, int goalY) {
+		return sqrt(
+				(currentX - startX) * (currentX - startX)
+						+ (currentY - startY) * (currentY - startY))
+				+ sqrt(
+						(currentX - goalX) * (currentX - goalX)
+								+ (currentY - goalY) * (currentY - goalY));
 	}
 
 	std::list<node> getAstarPath(int goalX, int goalY) {
@@ -224,10 +230,9 @@ public:
 					if (i == open_list.begin()) {
 						aux = *i;
 					} else {
-						if ( heuristic_function((*i).x, (*i).y, goalX,
-										goalY)
-								<= heuristic_function(aux.x, aux.y,
-												goalX, goalY)) {
+						if (heuristic_function(this->getPosX(),this->getPosY(),(*i).x, (*i).y, goalX, goalY)
+								<= heuristic_function(this->getPosX(),this->getPosY(),aux.x, aux.y, goalX,
+										goalY)) {
 							aux = (*i);
 							auxIterator = i;
 						}
@@ -239,7 +244,7 @@ public:
 
 			closed_list.push_back(*auxIterator);
 
-			if (heuristic_function(aux.x, aux.y, goalX, goalY) == 0)
+			if (heuristic_function(goalX, goalY,aux.x, aux.y, goalX, goalY) == 0)
 				break;
 
 			std::cout << closed_list.size() << std::endl;
