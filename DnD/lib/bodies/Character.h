@@ -250,7 +250,6 @@ public:
 					== 0)
 				break;
 
-			std::cout << closed_list.size() << std::endl;
 			currentX = aux.x;
 			currentY = aux.y;
 
@@ -265,8 +264,6 @@ public:
 				return_list.push_back(*i);
 				auxX = (*i).parentX;
 				auxY = (*i).parentY;
-
-				std::cout << "auxx vale" <<(*i).parentX << "y auxY vale "<<(*i).parentY<< std::endl;
 			} else {
 				if (auxX == (*i).x && auxY == (*i).y) {
 
@@ -276,6 +273,7 @@ public:
 				}
 			}
 		}
+		return_list.push_back(*closed_list.begin());
 
 		return return_list;
 	}

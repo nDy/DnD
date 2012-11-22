@@ -40,20 +40,22 @@ public:
 		windows[Window::GAMECREATION] = new GameCreation();
 		windows[Window::INGAME] = new InGame();
 		windows[Window::CREDITS] = new Credits();
-		this->Current = Window::INTRO;
+		this->Current = Window::INGAME;
 	}
 
 	bool Load() {
+
 		App->Create(sf::VideoMode(800, 600, 32), "DnD");
 
 		if (!App->IsOpened())
 			return false;
 
+		App->SetFramerateLimit(60);
+
 		return true;
 	}
 
 	int Loop() {
-
 		switch (this->Current) {
 		case Window::INTRO:
 			if (windows[Window::INTRO] == NULL) {

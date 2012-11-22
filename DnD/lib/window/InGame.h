@@ -13,6 +13,12 @@
 
 class InGame: public Window {
 public:
+
+	InGame() :
+			Window() {
+		this->setCurrent(Window::INGAME);
+	}
+
 	bool Load() {
 		return true;
 	}
