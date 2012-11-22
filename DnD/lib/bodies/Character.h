@@ -230,8 +230,10 @@ public:
 					if (i == open_list.begin()) {
 						aux = *i;
 					} else {
-						if (heuristic_function(this->getPosX(),this->getPosY(),(*i).x, (*i).y, goalX, goalY)
-								<= heuristic_function(this->getPosX(),this->getPosY(),aux.x, aux.y, goalX,
+						if (heuristic_function(this->getPosX(), this->getPosY(),
+								(*i).x, (*i).y, goalX, goalY)
+								<= heuristic_function(this->getPosX(),
+										this->getPosY(), aux.x, aux.y, goalX,
 										goalY)) {
 							aux = (*i);
 							auxIterator = i;
@@ -244,7 +246,8 @@ public:
 
 			closed_list.push_back(*auxIterator);
 
-			if (heuristic_function(goalX, goalY,aux.x, aux.y, goalX, goalY) == 0)
+			if (heuristic_function(goalX, goalY, aux.x, aux.y, goalX, goalY)
+					== 0)
 				break;
 
 			std::cout << closed_list.size() << std::endl;
@@ -253,8 +256,28 @@ public:
 
 		}
 		//Eliminar nodos basura en la lista cerrada a partir del nodo de llegada
+		std::list<node> return_list;
+		int auxX, auxY;
+		for (std::list<node>::iterator i = closed_list.end();
+				i != closed_list.begin(); --i) {
+			if (i == closed_list.end()) {
+				i--;
+				return_list.push_back(*i);
+				auxX = (*i).parentX;
+				auxY = (*i).parentY;
 
-		return closed_list;
+				std::cout << "auxx vale" <<(*i).parentX << "y auxY vale "<<(*i).parentY<< std::endl;
+			} else {
+				if (auxX == (*i).x && auxY == (*i).y) {
+
+					return_list.push_back(*i);
+					auxX = (*i).parentX;
+					auxY = (*i).parentY;
+				}
+			}
+		}
+
+		return return_list;
 	}
 }
 ;
