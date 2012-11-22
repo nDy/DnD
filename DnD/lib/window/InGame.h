@@ -10,12 +10,20 @@
 
 #include "../common/Window.h"
 #include "../common/ImageHandler.h"
+#include "../bodies/Player.h"
+#include "../bodies/Dragon.h"
+#include "../grid/SquareGrid.H"
 
 class InGame: public Window {
+private:
+	SquareGrid* grid;
+	Dragon* dragon;
 public:
 
 	InGame() :
 			Window() {
+		this->grid = new SquareGrid();
+		this->dragon = new Dragon(7, 7, grid);
 		this->setCurrent(Window::INGAME);
 	}
 
@@ -28,6 +36,8 @@ public:
 	}
 
 	int Render(sf::RenderWindow* App) {
+		//renderizado
+
 		return 0;
 	}
 

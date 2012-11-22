@@ -23,6 +23,7 @@ private:
 	bool step;
 	bool lookOver; // para ver sobre , a traves de ellos
 	short int bodyType;
+	sf::Sprite* sprite;
 	//imagen.
 
 public:

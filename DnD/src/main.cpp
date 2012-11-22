@@ -8,7 +8,6 @@
 #include "../lib/game/DnD.h"
 #include "../lib/bodies/Body.h"
 #include "../lib/bodies/Character.h"
-#include "../lib/grid/SquareGrid.H"
 
 #include <iostream>
 
