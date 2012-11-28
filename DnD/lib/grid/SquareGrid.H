@@ -8,6 +8,7 @@
 #ifndef SQUAREGRID_H_
 #define SQUAREGRID_H_
 
+#include <cstdlib>
 #include "../bodies/Terrain.h"
 
 class SquareGrid {
@@ -19,6 +20,7 @@ public:
 	enum {
 		STDWIDTH = 20, STDHEIGHT = 10
 	};
+
 	SquareGrid() {
 
 		grid = new Terrain**[STDWIDTH];
@@ -54,13 +56,21 @@ public:
 	bool switchPointers(int startX, int startY, int finishX, int finishY) {
 		if (!grid[finishX][finishY]->stepOver())
 			return false;
-		if (grid[finishX][finishY]->upon() != NULL) {
+		if (this->getBody(finishX,finishY) != NULL) {
 			return false;
 		}
-		grid[finishX][finishY]->upon() = grid[startX][startY]->upon();
+		this->getBody(finishX,finishY) = this->getBody(startX,startY);
 
-		grid[startX][startY]->upon() = NULL;
+		this->getBody(startX,startY) = NULL;
 		return true;
+	}
+
+	void clearVisits() {
+		for (int varH = 0; varH < this->getHeight(); ++varH) {
+			for (int varW = 0; varW < this->getWidth(); ++varW) {
+				this->getTerrain(varW, varH)->clearVisited();
+			}
+		}
 	}
 
 };

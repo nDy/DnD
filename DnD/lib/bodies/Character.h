@@ -17,7 +17,7 @@
 class Character: public Body {
 private:
 	int life;
-	int speed;
+	unsigned int speed;
 	SquareGrid* grid;
 
 public:
@@ -33,16 +33,41 @@ public:
 		this->speed = 0;
 	}
 
+	int getSpeed() {
+		return this->speed;
+	}
+
+	SquareGrid* getGrid() {
+		return this->grid;
+	}
+
 	void setSpeed(int Speed) {
 		this->speed = Speed;
 	}
 
 	bool moveTo(int X, int Y) {
-		if (!grid->switchPointers(this->getPosX(), this->getPosY(), X, Y))
-			return false;
-		this->setPosX(X);
-		this->setPosY(Y);
-		return true;
+		std::list<node> path = this->getAstarPath(X, Y);
+		for (std::list<Character::node>::iterator i = path.begin();
+				i != path.end(); ++i) {
+			std::cout << " Pos X " << (*i).x << " Pos Y " << (*i).y
+					<< std::endl;
+		}
+		std::list<node>::iterator auxIterator = path.begin();
+		int testX, testY;
+		testX = (*auxIterator).x;
+		testY = (*auxIterator).y;
+		if ((*auxIterator).x == X && (*auxIterator).y == Y) {
+			if (path.size() <= this->getSpeed()) {
+				if (!grid->switchPointers(this->getPosX(), this->getPosY(), X,
+						Y))
+					return false;
+				this->setPosX(X);
+				this->setPosY(Y);
+				return true;
+			}
+		}
+		return false;
+
 	}
 
 	float heuristic_function(int startX, int startY, int currentX, int currentY,
@@ -56,6 +81,8 @@ public:
 	}
 
 	std::list<node> getAstarPath(int goalX, int goalY) {
+
+		this->grid->clearVisits();
 
 		std::list<node> open_list;
 		std::list<node> closed_list;

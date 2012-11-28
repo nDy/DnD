@@ -5,17 +5,64 @@
 // Description : DnD
 //============================================================================
 
-#include "../lib/game/DnD.h"
+#include "../lib/game/ConsoleDnD.h"
 #include "../lib/bodies/Body.h"
 #include "../lib/bodies/Character.h"
 
 #include <iostream>
 
+void render(SquareGrid* grid) {
+	for (int varH = 0; varH < grid->getHeight(); ++varH) {
+		for (int varL = 0; varL < grid->getWidth(); ++varL) {
+			if (!grid->getTerrain(varL, varH)->stepOver()) {
+				std::cout << "W ";
+			} else {
+				if (grid->getBody(varL, varH) == NULL) {
+					std::cout << ". ";
+				} else {
+					std::cout << "O ";
+				}
+			}
+
+		}
+		std::cout << std::endl;
+	}
+}
+
+void setMap(SquareGrid* grid) {
+	grid->getTerrain(5, 2)->stepOver(false);
+	grid->getTerrain(5, 3)->stepOver(false);
+	grid->getTerrain(5, 4)->stepOver(false);
+	grid->getTerrain(5, 5)->stepOver(false);
+
+	grid->getTerrain(2, 5)->stepOver(false);
+	grid->getTerrain(3, 5)->stepOver(false);
+	grid->getTerrain(4, 5)->stepOver(false);
+
+	grid->getTerrain(6, 4)->stepOver(false);
+	grid->getTerrain(7, 4)->stepOver(false);
+	grid->getTerrain(8, 4)->stepOver(false);
+
+}
+
 int main(int argc, char **argv) {
-	DnD *game;
-	game = new DnD();
-	int i = game->Execute();
-	return i;
+	SquareGrid* grid;
+	grid = new SquareGrid();
+
+	Dragon * dragon;
+	dragon = new Dragon(2, 2, grid);
+	grid->getBody(dragon->getPosX(), dragon->getPosY()) = dragon;
+
+	setMap(grid);
+
+	while (true) {
+		//player->turn;
+		//dragon->turn;
+		dragon->turn();
+		render(grid);
+		sleep(2);
+	}
+	return 0;
 }
 
 /* A* TEST
