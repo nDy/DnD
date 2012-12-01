@@ -8,7 +8,7 @@
 #ifndef CONSOLEDND_H_
 #define CONSOLEDND_H_
 
-#include"../bodies/Warlock.h"
+#include"../bodies/Fighter.h"
 #include"../bodies/Dragon.h"
 #include"../grid/SquareGrid.H"
 #include <cstdlib>
@@ -16,16 +16,16 @@
 class ConsoleDnD {
 private:
 	bool running;
-	Warlock* player;
+	Fighter* player;
 	Dragon* dragon;
 	SquareGrid* grid;
 public:
 	ConsoleDnD() {
 		this->running = true;
 		this->grid = new SquareGrid();
-		this->player = new Warlock(1, 2, grid);
+		this->player = new Fighter(1, 2, grid);
 		//meter el cuerpo al grid
-		this->dragon = new Dragon(1, 5, grid);
+		this->dragon = new Dragon(1, 5, grid,this->player);
 	}
 
 	void Run() {

@@ -14,27 +14,26 @@
 #include <iostream>
 #include <vector>
 #include <list>
-#include "../common/Action.h"
 class Character: public Body {
-private:
-	int maxlife;
-	int currentLife;
-	unsigned int speed;
-	SquareGrid* grid;
-	std::list<Action> AtackActions;
-
 public:
-
 	struct node {
 		int x, y, parentX, parentY, length;
 		bool eliminated;
 	};
 
+private:
+	int maxlife;
+	int currentLife;
+	unsigned int speed;
+	SquareGrid* grid;
+
+public:
 	Character(int X, int Y, SquareGrid* Grid) :
 			Body(X, Y) {
 		this->grid = Grid;
 		this->speed = 0;
 	}
+
 
 	int getSpeed() {
 		return this->speed;
@@ -61,18 +60,19 @@ public:
 	}
 
 	bool moveTo(int X, int Y) {
-		std::list<node> path = this->getAstarPath(X, Y);
+		if (!this->grid->getTerrain(X, Y)->stepOver())
+			return false;
+		std::list<node> path = this->getAstarPath(X, Y, this->getPosX(),
+				this->getPosY());
 		for (std::list<Character::node>::iterator i = path.begin();
 				i != path.end(); ++i) {
 			std::cout << " Pos X " << (*i).x << " Pos Y " << (*i).y
 					<< std::endl;
 		}
 		std::list<node>::iterator auxIterator = path.begin();
-		int testX, testY;
-		testX = (*auxIterator).x;
-		testY = (*auxIterator).y;
+
 		if ((*auxIterator).x == X && (*auxIterator).y == Y) {
-			if (path.size() <= this->getSpeed()) {
+			if (path.size() - 1 <= this->getSpeed()) {
 				if (!grid->switchPointers(this->getPosX(), this->getPosY(), X,
 						Y))
 					return false;
@@ -82,7 +82,26 @@ public:
 			}
 		}
 		return false;
+	}
 
+	bool validMove(int X, int Y) {
+		if (!this->grid->getTerrain(X, Y)->stepOver())
+			return false;
+		std::list<node> path = this->getAstarPath(X, Y, this->getPosX(),
+				this->getPosY());
+		for (std::list<Character::node>::iterator i = path.begin();
+				i != path.end(); ++i) {
+			std::cout << " Pos X " << (*i).x << " Pos Y " << (*i).y
+					<< std::endl;
+		}
+		std::list<node>::iterator auxIterator = path.begin();
+
+		if ((*auxIterator).x == X && (*auxIterator).y == Y) {
+			if (path.size() - 1 <= this->getSpeed()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	float heuristic_function(int startX, int startY, int currentX, int currentY,
@@ -95,8 +114,7 @@ public:
 								+ (currentY - goalY) * (currentY - goalY));
 	}
 
-	std::list<node> getAstarPath(int goalX, int goalY,
-			int startX = this->getPosX(), int startY = this->getPosY()) {
+	std::list<node> getAstarPath(int goalX, int goalY, int startX, int startY) {
 
 		this->grid->clearVisits();
 

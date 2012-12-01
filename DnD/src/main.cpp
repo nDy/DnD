@@ -48,9 +48,10 @@ void setMap(SquareGrid* grid) {
 int main(int argc, char **argv) {
 	SquareGrid* grid;
 	grid = new SquareGrid();
-
+	Fighter* player;
+	player = new Fighter(1, 2, grid);
 	Dragon * dragon;
-	dragon = new Dragon(2, 2, grid);
+	dragon = new Dragon(2, 2, grid, player);
 	grid->getBody(dragon->getPosX(), dragon->getPosY()) = dragon;
 
 	setMap(grid);
@@ -58,7 +59,9 @@ int main(int argc, char **argv) {
 	while (true) {
 		//player->turn;
 		//dragon->turn;
+		std::cout<<"entra al while"<<std::endl;
 		dragon->turn();
+		std::cout<<"pasa el turno"<<std::endl;
 		render(grid);
 		sleep(2);
 	}
