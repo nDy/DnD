@@ -10,55 +10,79 @@
 
 #include "Character.h"
 #include <cstdlib>
+#include <limits>
 
 class Dragon: public Character {
 public:
+	int EnemyAproxLife;
+	int DamageDealt;
+
+	enum {
+		FUERADERANGO = 50,
+		BLOODIED = 70,
+		ATAQUE = 100,
+		MAXMOVPORTURNO = 1,
+		MAXATKPORTURNO = 1
+	};
+
 	Dragon(int X, int Y, SquareGrid* Grid) :
 			Character(X, Y, Grid) {
+		//Conocimiento, Velocidad del agente
 		this->setSpeed(6);
+		this->EnemyAproxLife = std::numeric_limits<int>::max();
+		this->DamageDealt = 0;
 	}
 
-	float Utility(){
+	int Utility(Character* Enemy, std::list<Action> Acciones) {
+		int result = 0;
+		if (Enemy->Dead()) {
+			result = std::numeric_limits<int>::max();
+			return result;
+		}
 
+		if (Enemy->Bloodied()) {
+			result += BLOODIED;
+		} else {
+			result -= BLOODIED;
+		}
+
+		if (this->Bloodied()) {
+			result -= BLOODIED;
+		} else {
+			result += BLOODIED;
+		}
+
+		for (std::list<Action>::iterator i = Acciones.begin();
+				i != Acciones.end(); ++i) {
+			switch ((*i).getType()) {
+			case Action::MOVEMENT:
+				if (getAstarPath((*i).getGoalX(), (*i).getGoalY()) == 2) {
+					result += FUERADERANGO;
+				} else {
+					result -= FUERADERANGO;
+				}
+				break;
+			case Action::ATTACK:
+				if (getAstarPath((*i).getGoalX(), (*i).getGoalY()) == 2) {
+					result += ATAQUE;
+					result += (*i).getMaxValue();
+				} else {
+					result -= ATAQUE;
+				}
+				break;
+			default:
+				break;
+			}
+		}
+
+		return result;
 	}
 
 	void turn() {
-		int auxX = rand() % this->getSpeed(); //ubicacion deseada del movimiento
-		int auxY = rand() % this->getSpeed(); //ubicacion deseada del movimiento
-		int signX = rand() % 2;
-		int signY = rand() % 2;
-
-		if (signX == 0) {
-			if (this->getPosX() - auxX >= 0) {
-				auxX = this->getPosX() - auxX;
-			} else {
-				auxX = this->getPosX() + auxX;
-			}
-		} else {
-			if (this->getPosX() + auxX < this->getGrid()->getWidth()) {
-				auxX = this->getPosX() + auxX;
-			} else {
-				auxX = this->getPosX() - auxX;
-			}
-		}
-
-		if (signY == 0) {
-			if (this->getPosY() - auxY >= 0) {
-				auxY = this->getPosY() - auxY;
-			} else {
-				auxY = this->getPosY() + auxY;
-			}
-		} else {
-			if (this->getPosY() + auxY < this->getGrid()->getHeight()) {
-				auxY = this->getPosY() + auxY;
-			} else {
-				auxY = this->getPosY() - auxY;
-			}
-		}
-
-		if (!this->moveTo(auxX, auxY)) {
-			std::cout << "Direccion invalida de movimiento" << this->getGrid()->getWidth() <<std::endl;
-		}
+		//Actualizar las probabilidades de las acciones del enemigo
+		//armar listas
+		//evaluar utilidad
+		//ejecutar mayor utilidad
 	}
 
 private:

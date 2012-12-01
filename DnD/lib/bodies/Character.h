@@ -14,11 +14,14 @@
 #include <iostream>
 #include <vector>
 #include <list>
+#include "../common/Action.h"
 class Character: public Body {
 private:
-	int life;
+	int maxlife;
+	int currentLife;
 	unsigned int speed;
 	SquareGrid* grid;
+	std::list<Action> AtackActions;
 
 public:
 
@@ -35,6 +38,18 @@ public:
 
 	int getSpeed() {
 		return this->speed;
+	}
+
+	bool Bloodied() {
+		if (currentLife < maxlife / 2)
+			return true;
+		return false;
+	}
+
+	bool Dead() {
+		if (this->currentLife <= 0)
+			return true;
+		return false;
 	}
 
 	SquareGrid* getGrid() {
@@ -80,15 +95,16 @@ public:
 								+ (currentY - goalY) * (currentY - goalY));
 	}
 
-	std::list<node> getAstarPath(int goalX, int goalY) {
+	std::list<node> getAstarPath(int goalX, int goalY,
+			int startX = this->getPosX(), int startY = this->getPosY()) {
 
 		this->grid->clearVisits();
 
 		std::list<node> open_list;
 		std::list<node> closed_list;
 
-		int currentX = this->getPosX();
-		int currentY = this->getPosY();
+		int currentX = startX;
+		int currentY = startY;
 
 		node posA;
 		int pathlength = 0;
