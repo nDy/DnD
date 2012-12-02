@@ -38,7 +38,10 @@ public:
 		NONE,
 		BITE,
 		CLAW,
-		FURY
+		FURY,
+		CLEAVE,
+		SURESTRIKE,
+		REAPINGSTRIKE
 	};
 	struct node {
 		int x, y, parentX, parentY, length;
@@ -59,6 +62,10 @@ public:
 			Body(X, Y) {
 		this->grid = Grid;
 		this->speed = 0;
+	}
+
+	void setLife(int life) {
+		this->currentLife = life;
 	}
 
 	void hit(int k) {
@@ -94,6 +101,9 @@ public:
 			return false;
 		std::list<node> path = this->getAstarPath(X, Y, this->getPosX(),
 				this->getPosY());
+		std::cout
+				<< "El agente realiza una accion de movimiento que pasa por las siguientes casillas."
+				<< std::endl;
 		for (std::list<Character::node>::iterator i = path.begin();
 				i != path.end(); ++i) {
 			std::cout << " Pos X " << (*i).x << " Pos Y " << (*i).y
@@ -125,6 +135,41 @@ public:
 			if (path.size() <= this->getSpeed()) {
 				return true;
 			}
+		}
+		return false;
+	}
+
+	bool Adjacent(int X, int Y, int goalX, int goalY) {
+		if (X == goalX - 1) {
+			if (Y == goalY - 1 || Y == goalY || Y == goalY + 1)
+				return true;
+		}
+		if (X == goalX) {
+			if (Y == goalY - 1 || Y == goalY + 1)
+				return true;
+		}
+		if (X == goalX + 1) {
+			if (Y == goalY - 1 || Y == goalY || Y == goalY + 1)
+				return true;
+		}
+		return false;
+	}
+
+	bool isAdjacentTo(int X, int Y) {
+		if (this->getPosX() == X - 1) {
+			if (this->getPosY() == Y - 1 || this->getPosY() == Y
+					|| this->getPosY() == Y + 1)
+				return true;
+		}
+		if (this->getPosX() == X) {
+			if (this->getPosY() == Y - 1 || this->getPosY() == Y + 1)
+				return true;
+
+		}
+		if (this->getPosX() == X + 1) {
+			if (this->getPosY() == Y - 1 || this->getPosY() == Y
+					|| this->getPosY() == Y + 1)
+				return true;
 		}
 		return false;
 	}

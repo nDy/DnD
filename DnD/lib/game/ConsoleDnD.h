@@ -23,7 +23,7 @@ public:
 	ConsoleDnD() {
 		this->running = true;
 		this->grid = new SquareGrid();
-		this->player = new Fighter(1, 2, grid);
+		this->player = new Fighter(1, 2, grid,this->dragon);
 		//meter el cuerpo al grid
 		this->dragon = new Dragon(1, 5, grid,this->player);
 	}

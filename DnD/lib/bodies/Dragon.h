@@ -35,6 +35,7 @@ public:
 			Character(X, Y, Grid) {
 		//Conocimiento, Velocidad del agente
 		this->setSpeed(6);
+		this->setLife(200);
 		this->EnemyAproxLife = std::numeric_limits<int>::max();
 		this->DamageDealt = 0;
 		this->Enemy = enemy;
@@ -63,41 +64,6 @@ public:
 		Claw.name = CLAW;
 		this->AtackActions.push_back(Claw);
 
-	}
-
-	bool Adjacent(int X, int Y, int goalX, int goalY) {
-		if (X == goalX - 1) {
-			if (Y == goalY - 1 || Y == goalY || Y == goalY + 1)
-				return true;
-		}
-		if (X == goalX) {
-			if (Y == goalY - 1 || Y == goalY + 1)
-				return true;
-		}
-		if (X == goalX + 1) {
-			if (Y == goalY - 1 || Y == goalY || Y == goalY + 1)
-				return true;
-		}
-		return false;
-	}
-
-	bool isAdjacentTo(int X, int Y) {
-		if (this->getPosX() == X - 1) {
-			if (this->getPosY() == Y - 1 || this->getPosY() == Y
-					|| this->getPosY() == Y + 1)
-				return true;
-		}
-		if (this->getPosX() == X) {
-			if (this->getPosY() == Y - 1 || this->getPosY() == Y + 1)
-				return true;
-
-		}
-		if (this->getPosX() == X + 1) {
-			if (this->getPosY() == Y - 1 || this->getPosY() == Y
-					|| this->getPosY() == Y + 1)
-				return true;
-		}
-		return false;
 	}
 
 	int Utility(std::list<Action> Acciones) {
@@ -168,7 +134,6 @@ public:
 		//armar listas
 		std::list<std::list<Action> > ListadeListas;
 
-//LLEGAR AL ESPACIO ADYACENTE DEL ENEMIGO
 		//Atk
 		if (this->isAdjacentTo(Enemy->getPosX(), Enemy->getPosY())) {
 			for (std::list<Action>::iterator i = AtackActions.begin();
@@ -181,7 +146,7 @@ public:
 				}
 			}
 		}
-		std::cout << "inserta posibles acciones de atk" << std::endl;
+
 		//Atk+mov
 		if (this->isAdjacentTo(Enemy->getPosX(), Enemy->getPosY())) {
 			for (std::list<Action>::iterator i = AtackActions.begin();
@@ -209,7 +174,6 @@ public:
 				}
 			}
 		}
-		std::cout << "inserta posibles acciones de atk + mov" << std::endl;
 
 		//Mov
 		//insertar movimiento
@@ -232,8 +196,6 @@ public:
 				}
 			}
 		}
-
-		std::cout << "inserta posibles acciones de mov" << std::endl;
 
 		//Mov+atk
 		for (int x = this->getPosX() - this->getSpeed();
@@ -266,13 +228,11 @@ public:
 			}
 		}
 
-		std::cout << "inserta posibles acciones de mov +atk" << std::endl;
-
 		//evaluar utilidad
 		std::list<Action> aux;
 		int current;
-		std::cout << "La lista de listas tiene " << ListadeListas.size()
-				<< "listas" << std::endl;
+		std::cout << "El agente calcula " << ListadeListas.size()
+				<< " posibles jugadas." << std::endl;
 
 		for (std::list<std::list<Action> >::iterator i = ListadeListas.begin();
 				i != ListadeListas.end(); ++i) {

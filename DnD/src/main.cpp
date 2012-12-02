@@ -47,18 +47,21 @@ void setMap(SquareGrid* grid) {
 
 int main(int argc, char **argv) {
 	SquareGrid* grid;
-	grid = new SquareGrid();
 	Fighter* player;
-	player = new Fighter(5, 1, grid);
-	grid->getBody(player->getPosX(), player->getPosY()) = player;
 	Dragon * dragon;
+	grid = new SquareGrid();
+	player = new Fighter(5, 1, grid, dragon);
+	grid->getBody(player->getPosX(), player->getPosY()) = player;
+
 	dragon = new Dragon(2, 2, grid, player);
 	grid->getBody(dragon->getPosX(), dragon->getPosY()) = dragon;
 
 	setMap(grid);
 
+//	while (!player->Dead()) { eliminar el // al arreglar bug de ataque basura
 	while (true) {
-		std::cout << "empieza el turno del agente" << std::endl;
+
+		std::cout << "Empieza el turno del agente." << std::endl;
 		std::list<Dragon::Action> accionesDeAgente = dragon->turn();
 		for (std::list<Dragon::Action>::iterator i = accionesDeAgente.begin();
 				i != accionesDeAgente.end(); ++i) {
@@ -85,14 +88,28 @@ int main(int argc, char **argv) {
 				break;
 			}
 		}
-		std::cout << "pasa el turno" << std::endl;
+		std::cout << "Termina el turno del agente." << std::endl;
 		render(grid);
 		sleep(2);
 		std::cout << "empieza el turno del player" << std::endl;
-		player->turn();
+		std::list<Character::Action> accionesDePlayer = player->turn();
+		for (std::list<Character::Action>::iterator i =
+				accionesDePlayer.begin(); i != accionesDePlayer.end(); ++i) {
+			switch ((*i).actionType) {
+			case Dragon::MOVEMENT:
+				player->moveTo((*i).goalX, (*i).goalY);
+			case Dragon::ATTACK:
+				dragon->hit((*i).value);
+				break;
+			default:
+				break;
+			}
+		}
+
 		render(grid);
 		sleep(2);
 	}
+	std::cout << "El player ha muerto, el agente ha ganado" << std::endl;
 	return 0;
 }
 
