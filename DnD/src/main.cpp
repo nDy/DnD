@@ -49,7 +49,8 @@ int main(int argc, char **argv) {
 	SquareGrid* grid;
 	grid = new SquareGrid();
 	Fighter* player;
-	player = new Fighter(1, 2, grid);
+	player = new Fighter(5, 1, grid);
+	grid->getBody(player->getPosX(), player->getPosY()) = player;
 	Dragon * dragon;
 	dragon = new Dragon(2, 2, grid, player);
 	grid->getBody(dragon->getPosX(), dragon->getPosY()) = dragon;
@@ -59,9 +60,33 @@ int main(int argc, char **argv) {
 	while (true) {
 		//player->turn;
 		//dragon->turn;
-		std::cout<<"entra al while"<<std::endl;
-		dragon->turn();
-		std::cout<<"pasa el turno"<<std::endl;
+		std::cout << "empieza el turno" << std::endl;
+		std::list<Dragon::Action> accionesDeAgente = dragon->turn();
+		for (std::list<Dragon::Action>::iterator i = accionesDeAgente.begin();
+				i != accionesDeAgente.end(); ++i) {
+			switch ((*i).actionType) {
+			case Dragon::MOVEMENT:
+				std::cout << "Hay una accion de movimiento" << std::endl;
+			case Dragon::ATTACK:
+				std::cout << "Hay una accion de ataque de " <<(*i).value<< std::endl;
+				break;
+			default:
+				break;
+			}
+		}
+		for (std::list<Dragon::Action>::iterator i = accionesDeAgente.begin();
+				i != accionesDeAgente.end(); ++i) {
+			switch ((*i).actionType) {
+			case Dragon::MOVEMENT:
+				dragon->moveTo((*i).goalX, (*i).goalY);
+			case Dragon::ATTACK:
+				player->hit((*i).value);
+				break;
+			default:
+				break;
+			}
+		}
+		std::cout << "pasa el turno" << std::endl;
 		render(grid);
 		sleep(2);
 	}

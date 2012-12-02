@@ -13,6 +13,12 @@
 #include <limits>
 
 class Dragon: public Character {
+
+private:
+	int EnemyAproxLife;
+	int DamageDealt;
+	Character* Enemy;
+
 public:
 	struct Action {
 		int actionType;
@@ -21,14 +27,10 @@ public:
 		int value;
 		int MAXvalue;
 		int goalX, goalY;
+		int name;
 	};
-private:
 	std::list<Action> AtackActions;
-	int EnemyAproxLife;
-	int DamageDealt;
-	Character* Enemy;
 
-public:
 	enum {
 		MOVEMENT,
 		ATTACK,
@@ -42,7 +44,10 @@ public:
 		FORT,
 		WILL,
 		REF,
-		NONE
+		NONE,
+		BITE,
+		CLAW,
+		FURY
 	};
 
 	enum {
@@ -60,19 +65,13 @@ public:
 		this->EnemyAproxLife = std::numeric_limits<int>::max();
 		this->DamageDealt = 0;
 		this->Enemy = enemy;
-		/*Action Claw(this, this->Enemy, ATTACK, NONE, AC,
-		 12);
-		 this->addAttackAction(Claw);
 
-		 this->addAttackAction(
-		 Action(this, this->Enemy, ATTACK, NONE,
-		 AC, 18));
-		 */
 		Action Bite;
 		Bite.actionType = ATTACK;
 		Bite.type = NONE;
 		Bite.Vstype = AC;
-		Bite.MAXvalue = 22;
+		Bite.MAXvalue = 18;
+		Bite.name = BITE;
 		this->AtackActions.push_back(Bite);
 
 		Action Fury;
@@ -80,6 +79,7 @@ public:
 		Fury.type = NONE;
 		Fury.Vstype = AC;
 		Fury.MAXvalue = 42;
+		Fury.name = FURY;
 		this->AtackActions.push_back(Fury);
 
 		Action Claw;
@@ -87,8 +87,44 @@ public:
 		Claw.type = NONE;
 		Claw.Vstype = AC;
 		Claw.MAXvalue = 12;
+		Claw.name = CLAW;
 		this->AtackActions.push_back(Claw);
 
+	}
+
+	bool Adjacent(int X, int Y, int goalX, int goalY) {
+		if (X == goalX - 1) {
+			if (Y == goalY - 1 || Y == goalY || Y == goalY + 1)
+				return true;
+		}
+		if (X == goalX) {
+			if (Y == goalY - 1 || Y == goalY + 1)
+				return true;
+		}
+		if (X == goalX + 1) {
+			if (Y == goalY - 1 || Y == goalY || Y == goalY + 1)
+				return true;
+		}
+		return false;
+	}
+
+	bool isAdjacentTo(int X, int Y) {
+		if (this->getPosX() == X - 1) {
+			if (this->getPosY() == Y - 1 || this->getPosY() == Y
+					|| this->getPosY() == Y + 1)
+				return true;
+		}
+		if (this->getPosX() == X) {
+			if (this->getPosY() == Y - 1 || this->getPosY() == Y + 1)
+				return true;
+
+		}
+		if (this->getPosX() == X + 1) {
+			if (this->getPosY() == Y - 1 || this->getPosY() == Y
+					|| this->getPosY() == Y + 1)
+				return true;
+		}
+		return false;
 	}
 
 	int Utility(std::list<Action> Acciones) {
@@ -110,24 +146,39 @@ public:
 			result += BLOODIED;
 		}
 
+		Action null;
+		null.actionType = -1;
 		for (std::list<Action>::iterator i = Acciones.begin();
 				i != Acciones.end(); ++i) {
 			switch ((*i).actionType) {
 			case MOVEMENT:
-				if (getAstarPath((*i).goalX, (*i).goalY, this->getPosX(),
-						this->getPosY()).size() == 2) {
+				null = (*i);
+				if (Adjacent((*i).goalX, (*i).goalY, this->Enemy->getPosX(),
+						this->Enemy->getPosY())) {
 					result += FUERADERANGO;
 				} else {
 					result -= FUERADERANGO;
 				}
 				break;
 			case ATTACK:
-				if (getAstarPath((*i).goalX, (*i).goalY, this->getPosX(),
-						this->getPosY()).size() == 2) {
-					result += ATAQUE;
-					result += (*i).MAXvalue;
+				if (null.actionType == -1) {
+					if (this->isAdjacentTo(this->Enemy->getPosX(),
+							this->Enemy->getPosY())) {
+						result += ATAQUE;
+						result += (*i).MAXvalue;
+					} else {
+						result -= ATAQUE;
+					}
+
 				} else {
-					result -= ATAQUE;
+					if (Adjacent((*i).goalX, (*i).goalY, this->Enemy->getPosX(),
+							this->Enemy->getPosY())) {
+						result += ATAQUE;
+						result += (*i).MAXvalue;
+					} else {
+						result -= ATAQUE;
+					}
+
 				}
 				break;
 			default:
@@ -139,56 +190,45 @@ public:
 	}
 
 	std::list<Action> turn() {
+
 		//Actualizar las probabilidades de las acciones del enemigo
 		//armar listas
 		std::list<std::list<Action> > ListadeListas;
-		std::cout << "Arma la lista" << std::endl;
+
+//LLEGAR AL ESPACIO ADYACENTE DEL ENEMIGO
 		//Atk
-		std::cout << "Arma la lista" << this->AtackActions.size() << std::endl;
-
-		for (std::list<Action>::iterator i = this->AtackActions.begin();
-				i != AtackActions.end(); ++i) {
-			std::cout << " Tipo " << (*i).actionType << " Max " << (*i).MAXvalue
-					<< std::endl;
-		}
-
-		std::cout << "pasa el chequeo" << std::endl;
-
-		if (getAstarPath(Enemy->getPosX(), Enemy->getPosY(), this->getPosX(),
-				this->getPosY()).size() == 2) {
+		if (this->isAdjacentTo(Enemy->getPosX(), Enemy->getPosY())) {
 			for (std::list<Action>::iterator i = AtackActions.begin();
 					i != AtackActions.end(); ++i) {
-				/*
-				 std::cout << "entra a la lista" << std::endl;
 
-				 if ((*i).getActionType() == ATTACK) {
-				 Action flag((*i));
-				 std::list<Action> tempList;
-				 tempList.push_front(*i);
-				 ListadeListas.push_front(tempList);
-				 }*/
+				if ((*i).actionType == ATTACK) {
+					std::list<Action> tempList;
+					tempList.push_front(*i);
+					ListadeListas.push_back(tempList);
+				}
 			}
 		}
 		std::cout << "inserta posibles acciones de atk" << std::endl;
 		//Atk+mov
-		if (getAstarPath(Enemy->getPosX(), Enemy->getPosY(), this->getPosX(),
-				this->getPosY()).size() == 2) {
+		if (this->isAdjacentTo(Enemy->getPosX(), Enemy->getPosY())) {
 			for (std::list<Action>::iterator i = AtackActions.begin();
 					i != AtackActions.end(); ++i) {
 				//insertar movimiento
 				for (int x = this->getPosX() - this->getSpeed();
 						x <= this->getPosX() + this->getSpeed(); x++) {
-					if (x >= 0) {
+					if (x >= 0 && x < this->getGrid()->getWidth()) {
 						for (int y = this->getPosY() - this->getSpeed();
 								y <= this->getPosY() + this->getSpeed(); y++) {
-							if (y >= 0) {
+							if (y >= 0 && y < this->getGrid()->getHeight()) {
 								if (this->validMove(x, y)) {
 									std::list<Action> tempList;
-									tempList.push_front(*i);
+									tempList.push_back(*i);
 									Action movimiento;
-									//(this, MOVEMENT, x,y);
+									movimiento.actionType = MOVEMENT;
+									movimiento.goalX = x;
+									movimiento.goalY = y;
 									tempList.push_front(movimiento);
-									ListadeListas.push_front(tempList);
+									ListadeListas.push_back(tempList);
 								}
 							}
 						}
@@ -199,6 +239,7 @@ public:
 		std::cout << "inserta posibles acciones de atk + mov" << std::endl;
 
 		//Mov
+		//insertar movimiento
 		for (int x = this->getPosX() - this->getSpeed();
 				x <= this->getPosX() + this->getSpeed(); x++) {
 			if (x >= 0) {
@@ -206,20 +247,19 @@ public:
 						y <= this->getPosY() + this->getSpeed(); y++) {
 					if (y >= 0) {
 						if (this->validMove(x, y)) {
-							if (getAstarPath(Enemy->getPosX(), Enemy->getPosY(),
-									x, y).size() == 2) {
-								std::list<Action> tempList;
-								Action movimiento;
-								//(this, MOVEMENT, x, y);
-								tempList.push_front(movimiento);
-								ListadeListas.push_front(tempList);
-
-							}
+							std::list<Action> tempList;
+							Action movimiento;
+							movimiento.actionType = MOVEMENT;
+							movimiento.goalX = x;
+							movimiento.goalY = y;
+							tempList.push_back(movimiento);
+							ListadeListas.push_back(tempList);
 						}
 					}
 				}
 			}
 		}
+
 		std::cout << "inserta posibles acciones de mov" << std::endl;
 
 		//Mov+atk
@@ -230,17 +270,21 @@ public:
 						y <= this->getPosY() + this->getSpeed(); y++) {
 					if (y >= 0) {
 						if (this->validMove(x, y)) {
-							if (getAstarPath(Enemy->getPosX(), Enemy->getPosY(),
-									x, y).size() == 2) {
+							if (Adjacent(x, y, Enemy->getPosX(),
+									Enemy->getPosY())) {
 								for (std::list<Action>::iterator i =
 										AtackActions.begin();
 										i != AtackActions.end(); ++i) {
-									std::list<Action> tempList;
-									tempList.push_front(*i);
-									Action movimiento;
-									//(this, MOVEMENT, x,y);
-									tempList.push_front(movimiento);
-									ListadeListas.push_front(tempList);
+									if ((*i).actionType == ATTACK) {
+										std::list<Action> tempList;
+										Action movimiento;
+										movimiento.actionType = MOVEMENT;
+										movimiento.goalX = x;
+										movimiento.goalY = y;
+										tempList.push_back(movimiento);
+										tempList.push_back(*i);
+										ListadeListas.push_back(tempList);
+									}
 								}
 							}
 						}
@@ -248,11 +292,52 @@ public:
 				}
 			}
 		}
+
 		std::cout << "inserta posibles acciones de mov +atk" << std::endl;
 
 		//evaluar utilidad
 		std::list<Action> aux;
-		//ejecutar mayor utilidad
+		int current;
+		std::cout << "La lista de listas tiene " << ListadeListas.size()
+				<< "listas" << std::endl;
+
+		for (std::list<std::list<Action> >::iterator i = ListadeListas.begin();
+				i != ListadeListas.end(); ++i) {
+			if (i == ListadeListas.begin()) {
+				aux = (*i);
+				current = Utility(aux);
+			} else {
+				if (Utility((*i)) >= current) {
+					aux = (*i);
+					current = Utility((*i));
+				}
+			}
+		}
+		//ejecutar ataques para accion de mayor utilidad
+		for (std::list<Action>::iterator i = aux.begin(); i != aux.end(); ++i) {
+			switch ((*i).name) {
+			case CLAW:
+				(*i).value = 0;
+				(*i).value += (4 + (rand() % 8 + 1));
+				this->DamageDealt = (*i).value;
+				break;
+			case BITE:
+				(*i).value = 0;
+				(*i).value += (4 + (rand() % 8 + 1) + (rand() % 6 + 1));
+				this->DamageDealt = (*i).value;
+				break;
+			case FURY:
+				(*i).value = 0;
+				(*i).value += ((4 + (rand() % 8 + 1)) + (4 + (rand() % 8 + 1))
+						+ 4 + (rand() % 8 + 1) + (rand() % 6 + 1));
+				this->DamageDealt = (*i).value;
+				break;
+			default:
+				break;
+			}
+		}
+		//retorno
+		return aux;
 	}
 
 private:

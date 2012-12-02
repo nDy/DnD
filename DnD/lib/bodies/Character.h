@@ -34,6 +34,9 @@ public:
 		this->speed = 0;
 	}
 
+	void hit(int k) {
+		this->currentLife -= k;
+	}
 
 	int getSpeed() {
 		return this->speed;
@@ -89,15 +92,10 @@ public:
 			return false;
 		std::list<node> path = this->getAstarPath(X, Y, this->getPosX(),
 				this->getPosY());
-		for (std::list<Character::node>::iterator i = path.begin();
-				i != path.end(); ++i) {
-			std::cout << " Pos X " << (*i).x << " Pos Y " << (*i).y
-					<< std::endl;
-		}
 		std::list<node>::iterator auxIterator = path.begin();
 
 		if ((*auxIterator).x == X && (*auxIterator).y == Y) {
-			if (path.size() - 1 <= this->getSpeed()) {
+			if (path.size() <= this->getSpeed()) {
 				return true;
 			}
 		}
@@ -136,9 +134,7 @@ public:
 
 		closed_list.push_back(posA);
 
-		while (1
-				&& pathlength
-						<= this->grid->getHeight() * this->grid->getWidth()) {
+		while (pathlength <= this->grid->getHeight() * this->grid->getWidth()) {
 
 			pathlength++;
 
@@ -177,7 +173,8 @@ public:
 			}
 
 			//arriba derecha
-			if ((currentX < this->grid->getWidth()) && (currentY > 0)
+			if ((currentX < this->grid->getWidth() - 1)
+					&& (currentY > 0)
 					&& (this->grid->getBody(currentX + 1, currentY - 1) == NULL)
 					&& this->grid->getTerrain(currentX + 1, currentY - 1)->stepOver()
 					&& !this->grid->getTerrain(currentX + 1, currentY - 1)->wasVisited()) {
@@ -195,15 +192,15 @@ public:
 			}
 
 			//derecha
-			if ((currentX < this->grid->getWidth())
+			if ((currentX < this->grid->getWidth() - 1)
 					&& (this->grid->getBody(currentX + 1, currentY) == NULL)
 					&& this->grid->getTerrain(currentX + 1, currentY)->stepOver()
 					&& !this->grid->getTerrain(currentX + 1, currentY)->wasVisited()) {
 				//meter a la lista abierta
 				this->grid->getTerrain(currentX + 1, currentY)->visit();
 				node pos;
-				pos.x = currentX - 1;
-				pos.y = currentY - 1;
+				pos.x = currentX + 1;
+				pos.y = currentY;
 				pos.parentX = currentX;
 				pos.parentY = currentY;
 				pos.length = pathlength;
@@ -212,8 +209,8 @@ public:
 			}
 
 			//abajo derecha
-			if ((currentX < this->grid->getWidth())
-					&& (currentY < this->grid->getHeight())
+			if ( (currentX < this->grid->getWidth() - 1)
+					&& (currentY < this->grid->getHeight() - 1)
 					&& (this->grid->getBody(currentX + 1, currentY + 1) == NULL)
 					&& this->grid->getTerrain(currentX + 1, currentY + 1)->stepOver()
 					&& !this->grid->getTerrain(currentX + 1, currentY + 1)->wasVisited()) {
@@ -230,7 +227,7 @@ public:
 			}
 
 			//abajo
-			if ((currentY < this->grid->getHeight())
+			if ( (currentY < this->grid->getHeight() - 1)
 					&& (this->grid->getBody(currentX, currentY + 1) == NULL)
 					&& this->grid->getTerrain(currentX, currentY + 1)->stepOver()
 					&& !this->grid->getTerrain(currentX, currentY + 1)->wasVisited()) {
@@ -247,7 +244,8 @@ public:
 			}
 
 			//abajo izquierda
-			if ((currentX > 0) && (currentY < this->grid->getHeight())
+			if ((currentX > 0)
+					&& (currentY < this->grid->getHeight() - 1)
 					&& (this->grid->getBody(currentX - 1, currentY + 1) == NULL)
 					&& this->grid->getTerrain(currentX - 1, currentY + 1)->stepOver()
 					&& !this->grid->getTerrain(currentX - 1, currentY + 1)->wasVisited()) {
