@@ -1,8 +1,8 @@
 //============================================================================
-// Name        : main.cpp
-// Author      : nDy
-// Version     : Alpha 1.0
-// Description : DnD
+// Name        : Dungeons and Dragons: Open-Insider
+// Author      : nDy & Mau
+// Version     : Beta 1.0
+// Description : Agente Inteligente para juego de Calabozos y Dragones.
 //============================================================================
 
 #include "../lib/game/ConsoleDnD.h"
@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
 
 	setMap(grid);
 
-	while (!player->Dead()) {
+	while (!player->Dead() && !dragon->Dead()) {
 		render(grid);
 		sleep(2);
 
@@ -68,11 +68,13 @@ int main(int argc, char **argv) {
 				i != accionesDeAgente.end(); ++i) {
 			switch ((*i).actionType) {
 			case Dragon::MOVEMENT:
-				std::cout << "Hay una accion de movimiento" << std::endl;
+				std::cout << "El Agente decidio tener una accion de movimiento."
+						<< std::endl;
 				break;
 			case Dragon::ATTACK:
-				std::cout << "Hay una accion de ataque de " << (*i).value
-						<< std::endl;
+				std::cout
+						<< "El Agente decidio tener una accion de ataque con la que hace: "
+						<< (*i).value << " puntos de dano." << std::endl;
 				break;
 			default:
 				break;
@@ -91,19 +93,19 @@ int main(int argc, char **argv) {
 				break;
 			}
 		}
-		std::cout << "Termina el turno del agente." << std::endl;
+		std::cout << "Termina el turno del Agente." << std::endl;
 		render(grid);
 		sleep(2);
-		std::cout << "empieza el turno del player" << std::endl;
+		std::cout << "Empieza el turno del Jugador." << std::endl;
 		std::list<Fighter::Action> accionesDePlayer = player->turn();
 		for (std::list<Fighter::Action>::iterator i = accionesDePlayer.begin();
 				i != accionesDePlayer.end(); ++i) {
 			switch ((*i).actionType) {
 			case Fighter::MOVEMENT:
 				if (player->moveTo((*i).goalX, (*i).goalY))
-					std::cout << "El player se mueve" << std::endl;
+					std::cout << "El Jugador se mueve." << std::endl;
 				else
-					std::cout << "El player no se mueve" << std::endl;
+					std::cout << "El Jugador no se mueve." << std::endl; // Movimiento invalido
 				break;
 			case Fighter::ATTACK:
 				dragon->hit((*i).value);
@@ -113,6 +115,10 @@ int main(int argc, char **argv) {
 			}
 		}
 	}
-	std::cout << "El player ha muerto, el agente ha ganado" << std::endl;
+	if (player->Dead())
+		std::cout << "El jugador ha muerto, el agente ha ganado" << std::endl;
+	if (dragon->Dead())
+		std::cout << "El agente ha muerto, el jugador ha ganado" << std::endl;
+
 	return 0;
 }
