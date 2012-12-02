@@ -18,7 +18,7 @@ class Character: public Body {
 private:
 	int maxlife;
 	int currentLife;
-	unsigned int speed;
+	int speed;
 	SquareGrid* grid;
 
 public:
@@ -72,7 +72,7 @@ public:
 		this->currentLife -= k;
 	}
 
-	unsigned int getSpeed() {
+	int getSpeed() {
 		return this->speed;
 	}
 
@@ -114,12 +114,26 @@ public:
 		if ((*auxIterator).x == X && (*auxIterator).y == Y) {
 			if (path.size() - 1 <= this->getSpeed()) {
 				if (!grid->switchPointers(this->getPosX(), this->getPosY(), X,
-						Y))
+						Y)) {
+
+					std::cout << "ERROR de switch pointers" << std::endl;
+					;
 					return false;
+				}
 				this->setPosX(X);
 				this->setPosY(Y);
 				return true;
+			} else {
+				std::cout << "ERROR de tama;os, el path mide " << path.size()
+						<< " y la velocidad es " << this->getSpeed()
+						<< std::endl;
 			}
+		} else {
+
+			std::cout << "La lista no coincide con la meta" << X << " "
+					<< (*auxIterator).x << " " << Y << " " << (*auxIterator).y
+					<< std::endl;
+			;
 		}
 		return false;
 	}

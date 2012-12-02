@@ -50,7 +50,7 @@ int main(int argc, char **argv) {
 	Fighter* player;
 	Dragon * dragon;
 	grid = new SquareGrid();
-	player = new Fighter(5, 1, grid, dragon);
+	player = new Fighter(2, 1, grid, dragon);
 	grid->getBody(player->getPosX(), player->getPosY()) = player;
 
 	dragon = new Dragon(2, 2, grid, player);
@@ -58,8 +58,7 @@ int main(int argc, char **argv) {
 
 	setMap(grid);
 
-//	while (!player->Dead()) { eliminar el // al arreglar bug de ataque basura
-	while (true) {
+	while (!player->Dead()) {
 		render(grid);
 		sleep(2);
 
@@ -96,14 +95,17 @@ int main(int argc, char **argv) {
 		render(grid);
 		sleep(2);
 		std::cout << "empieza el turno del player" << std::endl;
-		std::list<Character::Action> accionesDePlayer = player->turn();
-		for (std::list<Character::Action>::iterator i =
-				accionesDePlayer.begin(); i != accionesDePlayer.end(); ++i) {
+		std::list<Fighter::Action> accionesDePlayer = player->turn();
+		for (std::list<Fighter::Action>::iterator i = accionesDePlayer.begin();
+				i != accionesDePlayer.end(); ++i) {
 			switch ((*i).actionType) {
-			case Dragon::MOVEMENT:
-				player->moveTo((*i).goalX, (*i).goalY);
+			case Fighter::MOVEMENT:
+				if (player->moveTo((*i).goalX, (*i).goalY))
+					std::cout << "El player se mueve" << std::endl;
+				else
+					std::cout << "El player no se mueve" << std::endl;
 				break;
-			case Dragon::ATTACK:
+			case Fighter::ATTACK:
 				dragon->hit((*i).value);
 				break;
 			default:
@@ -114,35 +116,3 @@ int main(int argc, char **argv) {
 	std::cout << "El player ha muerto, el agente ha ganado" << std::endl;
 	return 0;
 }
-
-/* A* TEST
- SquareGrid* grid;
- grid = new SquareGrid();
-
- Character * player;
- player = new Character(2, 2, grid);
- grid->getTerrain(5, 2)->stepOver(false);
- grid->getTerrain(5, 3)->stepOver(false);
- grid->getTerrain(5, 4)->stepOver(false);
- grid->getTerrain(5, 5)->stepOver(false);
-
- grid->getTerrain(2, 5)->stepOver(false);
- grid->getTerrain(3, 5)->stepOver(false);
- grid->getTerrain(4, 5)->stepOver(false);
-
- std::list<Character::node> path = player->getAstarPath(7, 7);
- std::cout
- << "Al llenarse la lista del camino, se pueden ver en ella las propiedades que fueron declaradas"
- << std::endl;
- std::cout
- << " en el vertice, en caso de querer revisar el padre de cada uno de los nodos podria hacerse usando"
- << std::endl;
- std::cout << "el valor parentX y parent Y de la estructura node."
- << std::endl;
- for (std::list<Character::node>::iterator i = path.begin(); i != path.end();
- ++i) {
- std::cout << " Pos X " << (*i).x << " Pos Y " << (*i).y << std::endl;
- }
- END OF TEST
- */
-

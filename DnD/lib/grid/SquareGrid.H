@@ -14,8 +14,8 @@
 class SquareGrid {
 private:
 	Terrain*** grid;
-	unsigned int width;
-	unsigned int height;
+	int width;
+	int height;
 public:
 	enum {
 		STDWIDTH = 20, STDHEIGHT = 10
@@ -37,11 +37,11 @@ public:
 
 	}
 
-	unsigned int getWidth() {
+	int getWidth() {
 		return this->width;
 	}
 
-	unsigned int getHeight() {
+	int getHeight() {
 		return this->height;
 	}
 
@@ -66,8 +66,8 @@ public:
 	}
 
 	void clearVisits() {
-		for (unsigned int varH = 0; varH < this->getHeight(); ++varH) {
-			for (unsigned int varW = 0; varW < this->getWidth(); ++varW) {
+		for (int varH = 0; varH < this->getHeight(); ++varH) {
+			for (int varW = 0; varW < this->getWidth(); ++varW) {
 				this->getTerrain(varW, varH)->clearVisited();
 			}
 		}

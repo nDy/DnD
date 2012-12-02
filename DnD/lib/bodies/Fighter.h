@@ -19,6 +19,7 @@ public:
 	Fighter(int X, int Y, SquareGrid* Grid, Character* enemy) :
 			Character(X, Y, Grid) {
 		this->setLife(50);
+		this->setSpeed(5);
 		this->Enemy = enemy;
 
 		Action Cleave;
