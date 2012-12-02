@@ -15,12 +15,6 @@
 #include <vector>
 #include <list>
 class Character: public Body {
-public:
-	struct node {
-		int x, y, parentX, parentY, length;
-		bool eliminated;
-	};
-
 private:
 	int maxlife;
 	int currentLife;
@@ -28,6 +22,39 @@ private:
 	SquareGrid* grid;
 
 public:
+	enum {
+		MOVEMENT,
+		ATTACK,
+		STR,
+		CONST,
+		DEX,
+		INT,
+		WIS,
+		CHA,
+		AC,
+		FORT,
+		WILL,
+		REF,
+		NONE,
+		BITE,
+		CLAW,
+		FURY
+	};
+	struct node {
+		int x, y, parentX, parentY, length;
+		bool eliminated;
+	};
+
+	struct Action {
+		int actionType;
+		int type;
+		int Vstype;
+		int value;
+		int MAXvalue;
+		int goalX, goalY;
+		int name;
+	};
+
 	Character(int X, int Y, SquareGrid* Grid) :
 			Body(X, Y) {
 		this->grid = Grid;
@@ -173,8 +200,7 @@ public:
 			}
 
 			//arriba derecha
-			if ((currentX < this->grid->getWidth() - 1)
-					&& (currentY > 0)
+			if ((currentX < this->grid->getWidth() - 1) && (currentY > 0)
 					&& (this->grid->getBody(currentX + 1, currentY - 1) == NULL)
 					&& this->grid->getTerrain(currentX + 1, currentY - 1)->stepOver()
 					&& !this->grid->getTerrain(currentX + 1, currentY - 1)->wasVisited()) {
@@ -209,7 +235,7 @@ public:
 			}
 
 			//abajo derecha
-			if ( (currentX < this->grid->getWidth() - 1)
+			if ((currentX < this->grid->getWidth() - 1)
 					&& (currentY < this->grid->getHeight() - 1)
 					&& (this->grid->getBody(currentX + 1, currentY + 1) == NULL)
 					&& this->grid->getTerrain(currentX + 1, currentY + 1)->stepOver()
@@ -227,7 +253,7 @@ public:
 			}
 
 			//abajo
-			if ( (currentY < this->grid->getHeight() - 1)
+			if ((currentY < this->grid->getHeight() - 1)
 					&& (this->grid->getBody(currentX, currentY + 1) == NULL)
 					&& this->grid->getTerrain(currentX, currentY + 1)->stepOver()
 					&& !this->grid->getTerrain(currentX, currentY + 1)->wasVisited()) {
@@ -244,8 +270,7 @@ public:
 			}
 
 			//abajo izquierda
-			if ((currentX > 0)
-					&& (currentY < this->grid->getHeight() - 1)
+			if ((currentX > 0) && (currentY < this->grid->getHeight() - 1)
 					&& (this->grid->getBody(currentX - 1, currentY + 1) == NULL)
 					&& this->grid->getTerrain(currentX - 1, currentY + 1)->stepOver()
 					&& !this->grid->getTerrain(currentX - 1, currentY + 1)->wasVisited()) {

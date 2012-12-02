@@ -58,9 +58,7 @@ int main(int argc, char **argv) {
 	setMap(grid);
 
 	while (true) {
-		//player->turn;
-		//dragon->turn;
-		std::cout << "empieza el turno" << std::endl;
+		std::cout << "empieza el turno del agente" << std::endl;
 		std::list<Dragon::Action> accionesDeAgente = dragon->turn();
 		for (std::list<Dragon::Action>::iterator i = accionesDeAgente.begin();
 				i != accionesDeAgente.end(); ++i) {
@@ -68,7 +66,8 @@ int main(int argc, char **argv) {
 			case Dragon::MOVEMENT:
 				std::cout << "Hay una accion de movimiento" << std::endl;
 			case Dragon::ATTACK:
-				std::cout << "Hay una accion de ataque de " <<(*i).value<< std::endl;
+				std::cout << "Hay una accion de ataque de " << (*i).value
+						<< std::endl;
 				break;
 			default:
 				break;
@@ -87,6 +86,10 @@ int main(int argc, char **argv) {
 			}
 		}
 		std::cout << "pasa el turno" << std::endl;
+		render(grid);
+		sleep(2);
+		std::cout << "empieza el turno del player" << std::endl;
+		player->turn();
 		render(grid);
 		sleep(2);
 	}

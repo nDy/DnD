@@ -20,35 +20,8 @@ private:
 	Character* Enemy;
 
 public:
-	struct Action {
-		int actionType;
-		int type;
-		int Vstype;
-		int value;
-		int MAXvalue;
-		int goalX, goalY;
-		int name;
-	};
-	std::list<Action> AtackActions;
 
-	enum {
-		MOVEMENT,
-		ATTACK,
-		STR,
-		CONST,
-		DEX,
-		INT,
-		WIS,
-		CHA,
-		AC,
-		FORT,
-		WILL,
-		REF,
-		NONE,
-		BITE,
-		CLAW,
-		FURY
-	};
+	std::list<Action> AtackActions;
 
 	enum {
 		FUERADERANGO = 50,

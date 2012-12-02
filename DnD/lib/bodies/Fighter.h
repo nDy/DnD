@@ -13,7 +13,7 @@
 
 class Fighter: public Character {
 private:
-	//std::list<Action> AvailableActionList;
+	std::list<Action> AtackActions;
 public:
 	Fighter(int X, int Y, SquareGrid* Grid) :
 			Character(X, Y, Grid) {
