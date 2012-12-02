@@ -72,7 +72,7 @@ public:
 		this->currentLife -= k;
 	}
 
-	int getSpeed() {
+	unsigned int getSpeed() {
 		return this->speed;
 	}
 

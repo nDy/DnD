@@ -152,10 +152,10 @@ public:
 			for (std::list<Action>::iterator i = AtackActions.begin();
 					i != AtackActions.end(); ++i) {
 				//insertar movimiento
-				for (int x = this->getPosX() - this->getSpeed();
+				for (unsigned int x = this->getPosX() - this->getSpeed();
 						x <= this->getPosX() + this->getSpeed(); x++) {
 					if (x >= 0 && x < this->getGrid()->getWidth()) {
-						for (int y = this->getPosY() - this->getSpeed();
+						for (unsigned int y = this->getPosY() - this->getSpeed();
 								y <= this->getPosY() + this->getSpeed(); y++) {
 							if (y >= 0 && y < this->getGrid()->getHeight()) {
 								if (this->validMove(x, y)) {

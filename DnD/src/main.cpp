@@ -60,6 +60,8 @@ int main(int argc, char **argv) {
 
 //	while (!player->Dead()) { eliminar el // al arreglar bug de ataque basura
 	while (true) {
+		render(grid);
+		sleep(2);
 
 		std::cout << "Empieza el turno del agente." << std::endl;
 		std::list<Dragon::Action> accionesDeAgente = dragon->turn();
@@ -68,6 +70,7 @@ int main(int argc, char **argv) {
 			switch ((*i).actionType) {
 			case Dragon::MOVEMENT:
 				std::cout << "Hay una accion de movimiento" << std::endl;
+				break;
 			case Dragon::ATTACK:
 				std::cout << "Hay una accion de ataque de " << (*i).value
 						<< std::endl;
@@ -81,6 +84,7 @@ int main(int argc, char **argv) {
 			switch ((*i).actionType) {
 			case Dragon::MOVEMENT:
 				dragon->moveTo((*i).goalX, (*i).goalY);
+				break;
 			case Dragon::ATTACK:
 				player->hit((*i).value);
 				break;
@@ -98,6 +102,7 @@ int main(int argc, char **argv) {
 			switch ((*i).actionType) {
 			case Dragon::MOVEMENT:
 				player->moveTo((*i).goalX, (*i).goalY);
+				break;
 			case Dragon::ATTACK:
 				dragon->hit((*i).value);
 				break;
@@ -105,9 +110,6 @@ int main(int argc, char **argv) {
 				break;
 			}
 		}
-
-		render(grid);
-		sleep(2);
 	}
 	std::cout << "El player ha muerto, el agente ha ganado" << std::endl;
 	return 0;
