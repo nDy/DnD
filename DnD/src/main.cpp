@@ -50,10 +50,11 @@ int main(int argc, char **argv) {
 	Fighter* player;
 	Dragon * dragon;
 	grid = new SquareGrid();
-	player = new Fighter(2, 1, grid, dragon);
+	player = new Fighter(2, 1, grid);
 	grid->getBody(player->getPosX(), player->getPosY()) = player;
 
 	dragon = new Dragon(2, 2, grid, player);
+	player->setEnemy(dragon);
 	grid->getBody(dragon->getPosX(), dragon->getPosY()) = dragon;
 
 	setMap(grid);
@@ -70,23 +71,12 @@ int main(int argc, char **argv) {
 			case Dragon::MOVEMENT:
 				std::cout << "El Agente decidio tener una accion de movimiento."
 						<< std::endl;
+				dragon->moveTo((*i).goalX, (*i).goalY);
 				break;
 			case Dragon::ATTACK:
 				std::cout
 						<< "El Agente decidio tener una accion de ataque con la que hace: "
 						<< (*i).value << " puntos de dano." << std::endl;
-				break;
-			default:
-				break;
-			}
-		}
-		for (std::list<Dragon::Action>::iterator i = accionesDeAgente.begin();
-				i != accionesDeAgente.end(); ++i) {
-			switch ((*i).actionType) {
-			case Dragon::MOVEMENT:
-				dragon->moveTo((*i).goalX, (*i).goalY);
-				break;
-			case Dragon::ATTACK:
 				player->hit((*i).value);
 				break;
 			default:
@@ -108,6 +98,8 @@ int main(int argc, char **argv) {
 					std::cout << "El Jugador no se mueve." << std::endl; // Movimiento invalido
 				break;
 			case Fighter::ATTACK:
+				std::cout << "El Jugador Realiza un ataque que hace "
+						<< (*i).value << " puntos de dano." << std::endl;
 				dragon->hit((*i).value);
 				break;
 			default:

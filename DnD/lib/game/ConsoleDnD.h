@@ -23,9 +23,10 @@ public:
 	ConsoleDnD() {
 		this->running = true;
 		this->grid = new SquareGrid();
-		this->player = new Fighter(1, 2, grid,this->dragon);
+		this->player = new Fighter(1, 2, grid);
 		//meter el cuerpo al grid
-		this->dragon = new Dragon(1, 5, grid,this->player);
+		this->dragon = new Dragon(1, 5, grid, this->player);
+		this->player->setEnemy(this->dragon);
 	}
 
 	void Run() {
@@ -38,8 +39,8 @@ public:
 	}
 
 	void render() {
-		if(this->player == NULL){
-			std::cout<<"NO instancia el player"<<std::endl;
+		if (this->player == NULL) {
+			std::cout << "NO instancia el player" << std::endl;
 		}
 		for (int varH = 0; varH < this->grid->getHeight(); ++varH) {
 			for (int varL = 0; varL < this->grid->getWidth(); ++varL) {

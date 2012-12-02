@@ -86,7 +86,9 @@ public:
 		}
 
 		Action null;
+		Action nullatk;
 		null.actionType = -1;
+		nullatk.actionType = -1;
 		for (std::list<Action>::iterator i = Acciones.begin();
 				i != Acciones.end(); ++i) {
 			switch ((*i).actionType) {
@@ -100,29 +102,19 @@ public:
 				}
 				break;
 			case ATTACK:
-				if (null.actionType == -1) {
-					if (this->isAdjacentTo(this->Enemy->getPosX(),
-							this->Enemy->getPosY())) {
-						result += ATAQUE;
-						result += (*i).MAXvalue;
-					} else {
-						result -= ATAQUE;
-					}
-
-				} else {
-					if (Adjacent((*i).goalX, (*i).goalY, this->Enemy->getPosX(),
-							this->Enemy->getPosY())) {
-						result += ATAQUE;
-						result += (*i).MAXvalue;
-					} else {
-						result -= ATAQUE;
-					}
-
-				}
+				nullatk = (*i);
 				break;
 			default:
 				break;
 			}
+		}
+
+		if (nullatk.actionType == -1) {
+			result -= ATAQUE;
+		} else {
+			result += ATAQUE;
+			result += nullatk.MAXvalue;
+
 		}
 
 		return result;
