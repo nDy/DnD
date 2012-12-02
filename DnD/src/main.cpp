@@ -1,7 +1,7 @@
 //============================================================================
 // Name        : Dungeons and Dragons: Open-Insider
 // Author      : nDy & Mau
-// Version     : Beta 1.0
+// Version     : Beta 1.2
 // Description : Agente Inteligente para juego de Calabozos y Dragones.
 //============================================================================
 
@@ -50,14 +50,14 @@ int main(int argc, char **argv) {
 	Fighter* player;
 	Dragon * dragon;
 	grid = new SquareGrid();
-	player = new Fighter(2, 1, grid);
+	player = new Fighter(18, 2, grid);
 	grid->getBody(player->getPosX(), player->getPosY()) = player;
 
-	dragon = new Dragon(2, 2, grid, player);
+	dragon = new Dragon(18, 4, grid, player);
 	player->setEnemy(dragon);
 	grid->getBody(dragon->getPosX(), dragon->getPosY()) = dragon;
 
-	setMap(grid);
+	//setMap(grid);
 
 	while (!player->Dead() && !dragon->Dead()) {
 		render(grid);

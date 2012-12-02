@@ -171,10 +171,10 @@ public:
 		//insertar movimiento
 		for (int x = this->getPosX() - this->getSpeed();
 				x <= this->getPosX() + this->getSpeed(); x++) {
-			if (x >= 0) {
+			if (x >= 0 && x < this->getGrid()->getWidth()) {
 				for (int y = this->getPosY() - this->getSpeed();
 						y <= this->getPosY() + this->getSpeed(); y++) {
-					if (y >= 0) {
+					if (y >= 0 && y < this->getGrid()->getHeight()) {
 						if (this->validMove(x, y)) {
 							std::list<Action> tempList;
 							Action movimiento;
@@ -192,10 +192,10 @@ public:
 		//Mov+atk
 		for (int x = this->getPosX() - this->getSpeed();
 				x <= this->getPosX() + this->getSpeed(); x++) {
-			if (x >= 0) {
+			if (x >= 0 && x < this->getGrid()->getWidth()) {
 				for (int y = this->getPosY() - this->getSpeed();
 						y <= this->getPosY() + this->getSpeed(); y++) {
-					if (y >= 0) {
+					if (y >= 0 && y < this->getGrid()->getHeight()) {
 						if (this->validMove(x, y)) {
 							if (Adjacent(x, y, Enemy->getPosX(),
 									Enemy->getPosY())) {
