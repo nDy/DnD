@@ -1,7 +1,7 @@
 //============================================================================
 // Name        : Dungeons and Dragons: Open-Insider
 // Author      : nDy & Mau
-// Version     : Beta 1.2
+// Version     : Beta 2.0
 // Description : Agente Inteligente para juego de Calabozos y Dragones.
 //============================================================================
 
@@ -12,6 +12,8 @@
 #include <iostream>
 
 void render(SquareGrid* grid) {
+	std::system("clear");
+	std::cout << "Dungeons and Dragons: Open-Insider" << std::endl;
 	for (int varH = 0; varH < grid->getHeight(); ++varH) {
 		for (int varL = 0; varL < grid->getWidth(); ++varL) {
 			if (!grid->getTerrain(varL, varH)->stepOver()) {
@@ -50,14 +52,15 @@ int main(int argc, char **argv) {
 	Fighter* player;
 	Dragon * dragon;
 	grid = new SquareGrid();
-	player = new Fighter(18, 2, grid);
+	player = new Fighter(2, 2, grid);
 	grid->getBody(player->getPosX(), player->getPosY()) = player;
 
 	dragon = new Dragon(18, 4, grid, player);
 	player->setEnemy(dragon);
 	grid->getBody(dragon->getPosX(), dragon->getPosY()) = dragon;
 
-	//setMap(grid);
+	setMap(grid);
+	dragon->cargarvalores();
 
 	while (!player->Dead() && !dragon->Dead()) {
 		render(grid);
@@ -84,6 +87,10 @@ int main(int argc, char **argv) {
 			}
 		}
 		std::cout << "Termina el turno del Agente." << std::endl;
+		dragon->alimentarConocimiento(accionesDeAgente);
+		if (player->Dead() || dragon->Dead()) {
+			break;
+		}
 		render(grid);
 		sleep(2);
 		std::cout << "Empieza el turno del Jugador." << std::endl;
@@ -107,6 +114,8 @@ int main(int argc, char **argv) {
 			}
 		}
 	}
+
+	dragon->actualizarvalores();
 	if (player->Dead())
 		std::cout << "El jugador ha muerto, el agente ha ganado" << std::endl;
 	if (dragon->Dead())

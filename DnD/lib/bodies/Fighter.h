@@ -61,7 +61,7 @@ public:
 			std::cout << "Que desea hacer?" << std::endl;
 			std::cout << "1.-Realizar accion de movimiento." << std::endl;
 			std::cout << "2.-Realizar accion de ataque." << std::endl;
-			std::cout << "2.-Terminar turno." << std::endl;
+			std::cout << "3.-Terminar turno." << std::endl;
 			std::cin >> menu;
 			switch (menu) {
 			case 1:

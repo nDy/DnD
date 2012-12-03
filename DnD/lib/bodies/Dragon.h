@@ -11,6 +11,8 @@
 #include "Character.h"
 #include <cstdlib>
 #include <limits>
+#include <fstream>
+#include<string>
 
 class Dragon: public Character {
 
@@ -18,21 +20,86 @@ private:
 	int EnemyAproxLife;
 	int DamageDealt;
 	Character* Enemy;
+	int FUERADERANGO;
+	int BLOODIED;
+	int ATAQUE;
+	int PROBABILIDADDEC;
+	int PROBABILIDADDESS;
+	int PROBABILIDADDERS;
 
 public:
 
 	std::list<Action> AtackActions;
 
 	enum {
-		FUERADERANGO = 50,
-		BLOODIED = 70,
-		ATAQUE = 100,
-		MAXMOVPORTURNO = 1,
-		MAXATKPORTURNO = 1
+		MAXMOVPORTURNO = 1, MAXATKPORTURNO = 1
 	};
+
+	void actualizarvalores() {
+		//Normalizar las probabilidades
+		//Cargarlas en el archivo
+		std::ofstream myfile;
+		myfile.open("Info.txt");
+		myfile << FUERADERANGO << "\n";
+		myfile << BLOODIED << "\n";
+		myfile << ATAQUE << "\n";
+		myfile << PROBABILIDADDEC << "\n";
+		myfile << PROBABILIDADDESS << "\n";
+		myfile << PROBABILIDADDERS << "\n";
+		myfile.close();
+	}
+
+	void cargarvalores() {
+		std::string line;
+		std::ifstream myfile("Info.txt");
+		if (myfile.is_open()) {
+			getline(myfile, line);
+			FUERADERANGO = atoi(line.c_str());
+			std::cout << "Se ha cargado FUERADERANGO con un valor de: "
+					<< FUERADERANGO << std::endl;
+			getline(myfile, line);
+			BLOODIED = atoi(line.c_str());
+			std::cout << "Se ha cargado BLOODIED con un valor de: " << BLOODIED
+					<< std::endl;
+			getline(myfile, line);
+			ATAQUE = atoi(line.c_str());
+			std::cout << "Se ha cargado ATAQUE con un valor de: " << ATAQUE
+					<< std::endl;
+			getline(myfile, line);
+			PROBABILIDADDEC = atoi(line.c_str());
+			std::cout
+					<< "Se ha cargado PROBABILIDADDEC, que se asigna a la probabilidad que se le asigna al ataque Cleave con un valor de: "
+					<< PROBABILIDADDEC << std::endl;
+			getline(myfile, line);
+			PROBABILIDADDESS = atoi(line.c_str());
+			std::cout
+					<< "Se ha cargado PROBABILIDADDESS, que se asigna a la probabilidad que se le asigna al ataque Sure Strike con un valor de: "
+					<< PROBABILIDADDESS << std::endl;
+			getline(myfile, line);
+			PROBABILIDADDERS = atoi(line.c_str());
+			std::cout
+					<< "Se ha cargado PROBABILIDADDERS, que se asigna a la probabilidad que se le asigna al ataque Reaping Strike con un valor de: "
+					<< PROBABILIDADDERS << std::endl;
+			myfile.close();
+		} else {
+			//Valores cuando no tiene conocimiento previo
+			FUERADERANGO = 50;
+			BLOODIED = 70;
+			ATAQUE = 100;
+			PROBABILIDADDEC = 375;
+			PROBABILIDADDESS = 250;
+			PROBABILIDADDERS = 375;
+		}
+
+	}
+
+	void alimentarConocimiento(std::list<Action> AccionesHechasPorEnemigo){
+
+	}
 
 	Dragon(int X, int Y, SquareGrid* Grid, Character* enemy) :
 			Character(X, Y, Grid) {
+		//Inicializacion de constantes de valores aprendidos por el agente desde el archivo
 		//Conocimiento, Velocidad del agente
 		this->setSpeed(6);
 		this->setLife(200);
@@ -66,6 +133,12 @@ public:
 
 	}
 
+	float distance(int startX, int startY, int goalX, int goalY) {
+		return sqrt(
+				(startX - goalX) * (startX - goalX)
+						+ (startY - goalY) * (startY - goalY));
+	}
+
 	int Utility(std::list<Action> Acciones) {
 		int result = 0;
 		if (Enemy->Dead()) {
@@ -94,6 +167,8 @@ public:
 			switch ((*i).actionType) {
 			case MOVEMENT:
 				null = (*i);
+				result -= distance((*i).goalX, (*i).goalY,
+						this->Enemy->getPosX(), this->Enemy->getPosY());
 				if (Adjacent((*i).goalX, (*i).goalY, this->Enemy->getPosX(),
 						this->Enemy->getPosY())) {
 					result += FUERADERANGO;
@@ -113,7 +188,7 @@ public:
 			result -= ATAQUE;
 		} else {
 			result += ATAQUE;
-			result += nullatk.MAXvalue;
+			result += nullatk.MAXvalue; //prob
 
 		}
 
