@@ -20,12 +20,13 @@ private:
 	int EnemyAproxLife;
 	int DamageDealt;
 	Character* Enemy;
+	std::list<std::list<Action> > AccionesDePartida;
 	int FUERADERANGO;
 	int BLOODIED;
 	int ATAQUE;
 	int PROBABILIDADDEC;
-	int PROBABILIDADDESS;
-	int PROBABILIDADDERS;
+	int PROBABILIDADDEB;
+	int PROBABILIDADDEF;
 
 public:
 
@@ -36,7 +37,240 @@ public:
 	};
 
 	void actualizarvalores() {
-		//Normalizar las probabilidades
+		//Actualizar las probabilidades
+		int BitePGame = 0;
+		int BiteTotal = 0;
+		int ClawPGame = 0;
+		int ClawTotal = 0;
+		int FuryPGame = 0;
+		int FuryTotal = 0;
+		for (std::list<std::list<Action> >::iterator i =
+				AccionesDePartida.begin(); i != AccionesDePartida.end(); ++i) {
+			for (std::list<Action>::iterator j = (*i).begin(); j != (*i).end();
+					++j) {
+				if ((*j).actionType == ATTACK) {
+
+					switch ((*j).name) {
+					case CLAW:
+						++ClawPGame;
+						ClawTotal += (*j).value;
+						break;
+					case BITE:
+						++BitePGame;
+						BiteTotal += (*j).value;
+						break;
+					case FURY:
+						++FuryPGame;
+						FuryTotal += (*j).value;
+						break;
+					default:
+						break;
+					}
+				}
+			}
+
+		}
+
+		std::cout << "Se hicieron " << FuryPGame << "Fury" << std::endl;
+		std::cout << "Se hicieron " << ClawPGame << "Claw" << std::endl;
+		std::cout << "Se hicieron " << BitePGame << "Bite" << std::endl;
+
+		int FC; //Factor de correccion
+
+		if (BitePGame != 0 && ClawPGame != 0 && FuryPGame != 0) {
+			//se ejecutan las 3 acciones de ataque en la partida
+			if (PROBABILIDADDEB > 500 && PROBABILIDADDEC > 500
+					&& PROBABILIDADDEF > 500) {
+				FC = 500;
+			} else if (PROBABILIDADDEB > PROBABILIDADDEC
+					&& PROBABILIDADDEB > PROBABILIDADDEF) {
+				if (PROBABILIDADDEC > PROBABILIDADDEF) {
+					FC = PROBABILIDADDEF;
+				} else {
+					FC = PROBABILIDADDEC;
+				}
+			} else {
+				FC = PROBABILIDADDEB;
+			}
+
+			int PremioBite;
+			PremioBite = ((float) (BiteTotal / BitePGame)
+					/ ((BiteTotal / BitePGame) + (ClawTotal / ClawPGame)
+							+ (FuryTotal / FuryPGame))) * (FC);
+			int PremioClaw;
+			PremioClaw = ((float) (ClawTotal / ClawPGame)
+					/ ((BiteTotal / BitePGame) + (ClawTotal / ClawPGame)
+							+ (FuryTotal / FuryPGame))) * (FC);
+			int PremioFury;
+			PremioFury = ((float) (FuryTotal / FuryPGame)
+					/ ((BiteTotal / BitePGame) + (ClawTotal / ClawPGame)
+							+ (FuryTotal / FuryPGame))) * (FC);
+
+			std::cout << FC << std::endl;
+			std::cout << PremioBite << std::endl;
+			std::cout << PremioClaw << std::endl;
+			std::cout << PremioFury << std::endl;
+
+			//Normalizacion
+			while (PremioBite + PremioClaw + PremioFury != 3 * FC) {
+				if (PremioBite + PremioClaw + PremioFury > 3 * FC) {
+					PremioBite--;
+				}
+
+				if (PremioBite + PremioClaw + PremioFury > 3 * FC) {
+					PremioClaw--;
+				}
+				if (PremioBite + PremioClaw + PremioFury > 3 * FC) {
+					PremioFury--;
+				}
+
+				if (PremioBite + PremioClaw + PremioFury < 3 * FC) {
+					PremioBite++;
+				}
+				if (PremioBite + PremioClaw + PremioFury < 3 * FC) {
+					PremioClaw++;
+				}
+				if (PremioBite + PremioClaw + PremioFury < 3 * FC) {
+					PremioFury++;
+				}
+			}
+
+			PROBABILIDADDEB = PROBABILIDADDEB + PremioBite - FC;
+
+			PROBABILIDADDEC = PROBABILIDADDEC + PremioClaw - FC;
+
+			PROBABILIDADDEF = PROBABILIDADDEF + PremioFury - FC;
+
+			std::cout << PROBABILIDADDEB << std::endl;
+			std::cout << PROBABILIDADDEC << std::endl;
+			std::cout << PROBABILIDADDEF << std::endl;
+
+		} else if (BitePGame != 0 && ClawPGame != 0) {
+			if (PROBABILIDADDEB > 500 && PROBABILIDADDEC > 500) {
+				FC = 500;
+
+			} else if (PROBABILIDADDEB > PROBABILIDADDEC) {
+				FC = PROBABILIDADDEC;
+			} else {
+				FC = PROBABILIDADDEB;
+			}
+
+			int PremioBite;
+			PremioBite = ((float) (BiteTotal / BitePGame)
+					/ ((BiteTotal / BitePGame) + (ClawTotal / ClawPGame)))
+					* (FC);
+			int PremioClaw;
+			PremioClaw = ((float) (ClawTotal / ClawPGame)
+					/ ((BiteTotal / BitePGame) + (ClawTotal / ClawPGame)))
+					* (FC);
+
+			//Normalizacion
+			while (PremioBite + PremioClaw != 2 * FC) {
+				if (PremioBite + PremioClaw > 2 * FC) {
+					PremioBite--;
+				}
+
+				if (PremioBite + PremioClaw > 2 * FC) {
+					PremioClaw--;
+				}
+
+				if (PremioBite + PremioClaw < 2 * FC) {
+					PremioBite++;
+				}
+				if (PremioBite + PremioClaw < 2 * FC) {
+					PremioClaw++;
+				}
+
+			}
+
+			PROBABILIDADDEB = PROBABILIDADDEB + PremioBite - FC;
+
+			PROBABILIDADDEC = PROBABILIDADDEC + PremioClaw - FC;
+
+		} else if (ClawPGame != 0 && FuryPGame != 0) {
+			if (PROBABILIDADDEF > 500 && PROBABILIDADDEC > 500) {
+				FC = 500;
+			} else if (PROBABILIDADDEF > PROBABILIDADDEC) {
+				FC = PROBABILIDADDEC;
+			} else {
+				FC = PROBABILIDADDEF;
+			}
+
+			int PremioClaw;
+			PremioClaw = ((float) (ClawTotal / ClawPGame)
+					/ ((FuryTotal / FuryPGame) + (ClawTotal / ClawPGame)))
+					* (FC);
+			int PremioFury;
+			PremioFury = ((float) (FuryTotal / FuryPGame)
+					/ ((FuryTotal / FuryPGame) + (ClawTotal / ClawPGame)))
+					* (FC);
+
+			//Normalizacion
+			while (PremioClaw + PremioFury != 2 * FC) {
+
+				if (PremioClaw + PremioFury > 2 * FC) {
+					PremioClaw--;
+				}
+				if (PremioClaw + PremioFury > 2 * FC) {
+					PremioFury--;
+				}
+
+				if (PremioClaw + PremioFury < 2 * FC) {
+					PremioClaw++;
+				}
+				if (PremioClaw + PremioFury < 2 * FC) {
+					PremioFury++;
+				}
+			}
+
+			PROBABILIDADDEC = PROBABILIDADDEC + PremioClaw - FC;
+
+			PROBABILIDADDEF = PROBABILIDADDEF + PremioFury - FC;
+
+		} else if (BitePGame != 0 && FuryPGame != 0) {
+			if (PROBABILIDADDEB > 500 && PROBABILIDADDEF > 500) {
+				FC = 500;
+			} else if (PROBABILIDADDEB > PROBABILIDADDEF) {
+				FC = PROBABILIDADDEF;
+			} else {
+				FC = PROBABILIDADDEB;
+			}
+
+			int PremioBite;
+			PremioBite = ((float) (BiteTotal / BitePGame)
+					/ ((FuryTotal / FuryPGame) + (BiteTotal / BitePGame)))
+					* (FC);
+			int PremioFury;
+			PremioFury = ((float) (FuryTotal / FuryPGame)
+					/ ((FuryTotal / FuryPGame) + (BiteTotal / BitePGame)))
+					* (FC);
+
+			//Normalizacion
+			while (PremioBite + PremioFury != 2 * FC) {
+				if (PremioBite + PremioFury > 2 * FC) {
+					PremioBite--;
+				}
+
+				if (PremioBite + PremioFury > 2 * FC) {
+					PremioFury--;
+				}
+
+				if (PremioBite + PremioFury < 2 * FC) {
+					PremioBite++;
+				}
+				if (PremioBite + PremioFury < 2 * FC) {
+					PremioFury++;
+				}
+			}
+
+			PROBABILIDADDEB = PROBABILIDADDEB + PremioBite - FC;
+
+			PROBABILIDADDEF = PROBABILIDADDEF + PremioFury - FC;
+
+		} else {
+			FC = 0;
+		}
+
 		//Cargarlas en el archivo
 		std::ofstream myfile;
 		myfile.open("Info.txt");
@@ -44,8 +278,8 @@ public:
 		myfile << BLOODIED << "\n";
 		myfile << ATAQUE << "\n";
 		myfile << PROBABILIDADDEC << "\n";
-		myfile << PROBABILIDADDESS << "\n";
-		myfile << PROBABILIDADDERS << "\n";
+		myfile << PROBABILIDADDEB << "\n";
+		myfile << PROBABILIDADDEF << "\n";
 		myfile.close();
 	}
 
@@ -71,30 +305,30 @@ public:
 					<< "Se ha cargado PROBABILIDADDEC, que se asigna a la probabilidad que se le asigna al ataque Cleave con un valor de: "
 					<< PROBABILIDADDEC << std::endl;
 			getline(myfile, line);
-			PROBABILIDADDESS = atoi(line.c_str());
+			PROBABILIDADDEB = atoi(line.c_str());
 			std::cout
-					<< "Se ha cargado PROBABILIDADDESS, que se asigna a la probabilidad que se le asigna al ataque Sure Strike con un valor de: "
-					<< PROBABILIDADDESS << std::endl;
+					<< "Se ha cargado PROBABILIDADDEB, que se asigna a la probabilidad que se le asigna al ataque Sure Strike con un valor de: "
+					<< PROBABILIDADDEB << std::endl;
 			getline(myfile, line);
-			PROBABILIDADDERS = atoi(line.c_str());
+			PROBABILIDADDEF = atoi(line.c_str());
 			std::cout
-					<< "Se ha cargado PROBABILIDADDERS, que se asigna a la probabilidad que se le asigna al ataque Reaping Strike con un valor de: "
-					<< PROBABILIDADDERS << std::endl;
+					<< "Se ha cargado PROBABILIDADDEF, que se asigna a la probabilidad que se le asigna al ataque Reaping Strike con un valor de: "
+					<< PROBABILIDADDEF << std::endl;
 			myfile.close();
 		} else {
 			//Valores cuando no tiene conocimiento previo
 			FUERADERANGO = 50;
 			BLOODIED = 70;
 			ATAQUE = 100;
-			PROBABILIDADDEC = 375;
-			PROBABILIDADDESS = 250;
-			PROBABILIDADDERS = 375;
+			PROBABILIDADDEC = 3333;
+			PROBABILIDADDEB = 3333;
+			PROBABILIDADDEF = 3334;
 		}
 
 	}
 
-	void alimentarConocimiento(std::list<Action> AccionesHechasPorEnemigo){
-
+	void alimentarConocimiento(std::list<Action> AccionesHechasPorEnemigo) {
+		this->AccionesDePartida.push_back(AccionesHechasPorEnemigo);
 	}
 
 	Dragon(int X, int Y, SquareGrid* Grid, Character* enemy) :
@@ -137,6 +371,31 @@ public:
 		return sqrt(
 				(startX - goalX) * (startX - goalX)
 						+ (startY - goalY) * (startY - goalY));
+	}
+
+	Action atk() {
+		Action atk;
+		atk.actionType = ATTACK;
+
+		int value = (rand() % 10001);
+
+		if ((0 <= value) && (value < PROBABILIDADDEB)) {
+			//El ataque es Bite
+			atk.name = BITE;
+		}
+		if ((PROBABILIDADDEB <= value)
+				&& (value < PROBABILIDADDEB + PROBABILIDADDEC)) {
+			//El ataque es Claw
+			atk.name = CLAW;
+		}
+		if ((PROBABILIDADDEB + PROBABILIDADDEC <= value)
+				&& value
+						< (PROBABILIDADDEB + PROBABILIDADDEC + PROBABILIDADDEF)) {
+			//El ataque es Fury
+			atk.name = FURY;
+		}
+
+		return atk;
 	}
 
 	int Utility(std::list<Action> Acciones) {
@@ -188,8 +447,6 @@ public:
 			result -= ATAQUE;
 		} else {
 			result += ATAQUE;
-			result += nullatk.MAXvalue; //prob
-
 		}
 
 		return result;
@@ -203,38 +460,33 @@ public:
 
 		//Atk
 		if (this->isAdjacentTo(Enemy->getPosX(), Enemy->getPosY())) {
-			for (std::list<Action>::iterator i = AtackActions.begin();
-					i != AtackActions.end(); ++i) {
-
-				if ((*i).actionType == ATTACK) {
-					std::list<Action> tempList;
-					tempList.push_front(*i);
-					ListadeListas.push_back(tempList);
-				}
-			}
+			Action atk;
+			atk.actionType = ATTACK;
+			std::list<Action> tempList;
+			tempList.push_front(atk);
+			ListadeListas.push_back(tempList);
 		}
 
 		//Atk+mov
 		if (this->isAdjacentTo(Enemy->getPosX(), Enemy->getPosY())) {
-			for (std::list<Action>::iterator i = AtackActions.begin();
-					i != AtackActions.end(); ++i) {
-				//insertar movimiento
-				for (int x = this->getPosX() - this->getSpeed();
-						x <= this->getPosX() + this->getSpeed(); x++) {
-					if (x >= 0 && x < this->getGrid()->getWidth()) {
-						for (int y = this->getPosY() - this->getSpeed();
-								y <= this->getPosY() + this->getSpeed(); y++) {
-							if (y >= 0 && y < this->getGrid()->getHeight()) {
-								if (this->validMove(x, y)) {
-									std::list<Action> tempList;
-									tempList.push_back(*i);
-									Action movimiento;
-									movimiento.actionType = MOVEMENT;
-									movimiento.goalX = x;
-									movimiento.goalY = y;
-									tempList.push_front(movimiento);
-									ListadeListas.push_back(tempList);
-								}
+			Action atk;
+			atk.actionType = ATTACK;
+			//insertar movimiento
+			for (int x = this->getPosX() - this->getSpeed();
+					x <= this->getPosX() + this->getSpeed(); x++) {
+				if (x >= 0 && x < this->getGrid()->getWidth()) {
+					for (int y = this->getPosY() - this->getSpeed();
+							y <= this->getPosY() + this->getSpeed(); y++) {
+						if (y >= 0 && y < this->getGrid()->getHeight()) {
+							if (this->validMove(x, y)) {
+								std::list<Action> tempList;
+								tempList.push_back(atk);
+								Action movimiento;
+								movimiento.actionType = MOVEMENT;
+								movimiento.goalX = x;
+								movimiento.goalY = y;
+								tempList.push_front(movimiento);
+								ListadeListas.push_back(tempList);
 							}
 						}
 					}
@@ -274,20 +526,17 @@ public:
 						if (this->validMove(x, y)) {
 							if (Adjacent(x, y, Enemy->getPosX(),
 									Enemy->getPosY())) {
-								for (std::list<Action>::iterator i =
-										AtackActions.begin();
-										i != AtackActions.end(); ++i) {
-									if ((*i).actionType == ATTACK) {
-										std::list<Action> tempList;
-										Action movimiento;
-										movimiento.actionType = MOVEMENT;
-										movimiento.goalX = x;
-										movimiento.goalY = y;
-										tempList.push_back(movimiento);
-										tempList.push_back(*i);
-										ListadeListas.push_back(tempList);
-									}
-								}
+								Action atk;
+								atk.actionType = ATTACK;
+								atk.value = 0;
+								std::list<Action> tempList;
+								Action movimiento;
+								movimiento.actionType = MOVEMENT;
+								movimiento.goalX = x;
+								movimiento.goalY = y;
+								tempList.push_back(movimiento);
+								tempList.push_back(atk);
+								ListadeListas.push_back(tempList);
 							}
 						}
 					}
@@ -313,6 +562,17 @@ public:
 				}
 			}
 		}
+
+		//Decision de ataque
+
+		for (std::list<Action>::iterator i = aux.begin(); i != aux.end(); ++i) {
+			if ((*i).actionType == ATTACK) {
+				(*i) = atk();
+			}
+		}
+
+		this->DamageDealt = 0;
+
 		//ejecutar ataques para accion de mayor utilidad
 		for (std::list<Action>::iterator i = aux.begin(); i != aux.end(); ++i) {
 			switch ((*i).name) {
@@ -320,23 +580,36 @@ public:
 				(*i).value = 0;
 				(*i).value += (4 + (rand() % 8 + 1));
 				this->DamageDealt = (*i).value;
+				std::cout
+						<< "El hagente decidio realizar un ataque \"Claw\" haciendo un total de "
+						<< this->DamageDealt << " puntos de dano." << std::endl;
 				break;
 			case BITE:
 				(*i).value = 0;
 				(*i).value += (4 + (rand() % 8 + 1) + (rand() % 6 + 1));
 				this->DamageDealt = (*i).value;
+				std::cout
+						<< "El hagente decidio realizar un ataque \"Bite\" haciendo un total de "
+						<< this->DamageDealt << " puntos de dano." << std::endl;
 				break;
 			case FURY:
 				(*i).value = 0;
 				(*i).value += ((4 + (rand() % 8 + 1)) + (4 + (rand() % 8 + 1))
 						+ 4 + (rand() % 8 + 1) + (rand() % 6 + 1));
 				this->DamageDealt = (*i).value;
+				std::cout
+						<< "El hagente decidio realizar un ataque \"Dragons Fury\" haciendo un total de "
+						<< this->DamageDealt << " puntos de dano." << std::endl;
 				break;
 			default:
 				break;
 			}
 		}
+
+		//Alimentar acciones hechas a la base de conocimiento para actualizacion en tiempo real
+		this->alimentarConocimiento(aux);
 		//retorno
+
 		return aux;
 	}
 

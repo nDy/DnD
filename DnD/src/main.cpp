@@ -77,9 +77,9 @@ int main(int argc, char **argv) {
 				dragon->moveTo((*i).goalX, (*i).goalY);
 				break;
 			case Dragon::ATTACK:
-				std::cout
-						<< "El Agente decidio tener una accion de ataque con la que hace: "
-						<< (*i).value << " puntos de dano." << std::endl;
+				std::cout << "El ataque entra con ."
+										<<(*i).value << std::endl;
+
 				player->hit((*i).value);
 				break;
 			default:
@@ -87,7 +87,6 @@ int main(int argc, char **argv) {
 			}
 		}
 		std::cout << "Termina el turno del Agente." << std::endl;
-		dragon->alimentarConocimiento(accionesDeAgente);
 		if (player->Dead() || dragon->Dead()) {
 			break;
 		}

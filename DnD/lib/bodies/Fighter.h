@@ -18,7 +18,7 @@ private:
 public:
 	Fighter(int X, int Y, SquareGrid* Grid) :
 			Character(X, Y, Grid) {
-		this->setLife(50);
+		this->setLife(70);
 		this->setSpeed(5);
 
 		Action Cleave;
