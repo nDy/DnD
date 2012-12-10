@@ -12,7 +12,9 @@
 #include <cstdlib>
 #include <limits>
 #include <fstream>
-#include<string>
+#include <string>
+#include "boost/random.hpp"
+#include "boost/generator_iterator.hpp"
 
 class Dragon: public Character {
 
@@ -376,8 +378,11 @@ public:
 	Action atk() {
 		Action atk;
 		atk.actionType = ATTACK;
-
-		int value = (rand() % 10001);
+		boost::mt19937 rng(time(0));
+		boost::uniform_int<> one_to_tenthousand(0, 10000);
+		boost::variate_generator<boost::mt19937, boost::uniform_int<> > dice(
+				rng, one_to_tenthousand);
+		int value = dice();
 
 		if ((0 <= value) && (value < PROBABILIDADDEB)) {
 			//El ataque es Bite
