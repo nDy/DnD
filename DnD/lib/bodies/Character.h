@@ -112,7 +112,7 @@ public:
 		std::list<node>::iterator auxIterator = path.begin();
 
 		if ((*auxIterator).x == X && (*auxIterator).y == Y) {
-			if (path.size() - 1 <= this->getSpeed()) {
+			if ((int) path.size() - 1 <= this->getSpeed()) {
 				if (!grid->switchPointers(this->getPosX(), this->getPosY(), X,
 						Y)) {
 
@@ -146,7 +146,7 @@ public:
 		std::list<node>::iterator auxIterator = path.begin();
 
 		if ((*auxIterator).x == X && (*auxIterator).y == Y) {
-			if (path.size() <= this->getSpeed()) {
+			if ((int) path.size() <= this->getSpeed()) {
 				return true;
 			}
 		}
