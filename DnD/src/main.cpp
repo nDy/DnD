@@ -1,7 +1,7 @@
 //============================================================================
 // Name        : Dungeons and Dragons: Open-Insider
 // Author      : nDy & Mau
-// Version     : Beta 2.0
+// Version     : Beta 3.0
 // Description : Agente Inteligente para juego de Calabozos y Dragones.
 //============================================================================
 
@@ -11,7 +11,7 @@
 
 #include <iostream>
 
-void render(SquareGrid* grid) {
+void render(SquareGrid* grid, Character* Player) {
 	std::system("clear");
 	std::cout << "Dungeons and Dragons: Open-Insider" << std::endl;
 	for (int varH = 0; varH < grid->getHeight(); ++varH) {
@@ -22,7 +22,10 @@ void render(SquareGrid* grid) {
 				if (grid->getBody(varL, varH) == NULL) {
 					std::cout << ". ";
 				} else {
-					std::cout << "O ";
+					if (grid->getBody(varL, varH) == Player)
+						std::cout << "P ";
+					else
+						std::cout << "A ";
 				}
 			}
 
@@ -63,7 +66,7 @@ int main(int argc, char **argv) {
 	dragon->cargarvalores();
 
 	while (!player->Dead() && !dragon->Dead()) {
-		render(grid);
+		render(grid,player);
 		sleep(2);
 
 		std::cout << "Empieza el turno del agente." << std::endl;
@@ -77,8 +80,7 @@ int main(int argc, char **argv) {
 				dragon->moveTo((*i).goalX, (*i).goalY);
 				break;
 			case Dragon::ATTACK:
-				std::cout << "El ataque entra con ."
-										<<(*i).value << std::endl;
+				std::cout << "El ataque entra con ." << (*i).value << std::endl;
 
 				player->hit((*i).value);
 				break;
@@ -90,7 +92,7 @@ int main(int argc, char **argv) {
 		if (player->Dead() || dragon->Dead()) {
 			break;
 		}
-		render(grid);
+		render(grid,player);
 		sleep(2);
 		std::cout << "Empieza el turno del Jugador." << std::endl;
 		std::list<Fighter::Action> accionesDePlayer = player->turn();
