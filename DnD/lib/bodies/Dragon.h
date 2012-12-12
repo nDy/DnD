@@ -108,15 +108,15 @@ public:
 			int PremioBite;
 			PremioBite = ((float) (BiteTotal / BitePGame)
 					/ ((BiteTotal / BitePGame) + (ClawTotal / ClawPGame)
-							+ (FuryTotal / FuryPGame))) * (FC);
+							+ (FuryTotal / FuryPGame))) * (3 * FC);
 			int PremioClaw;
 			PremioClaw = ((float) (ClawTotal / ClawPGame)
 					/ ((BiteTotal / BitePGame) + (ClawTotal / ClawPGame)
-							+ (FuryTotal / FuryPGame))) * (FC);
+							+ (FuryTotal / FuryPGame))) * (3 * FC);
 			int PremioFury;
 			PremioFury = ((float) (FuryTotal / FuryPGame)
 					/ ((BiteTotal / BitePGame) + (ClawTotal / ClawPGame)
-							+ (FuryTotal / FuryPGame))) * (FC);
+							+ (FuryTotal / FuryPGame))) * (3 * FC);
 
 			//Normalizacion
 			while (PremioBite + PremioClaw + PremioFury != 3 * FC) {
@@ -161,11 +161,11 @@ public:
 			int PremioBite;
 			PremioBite = ((float) (BiteTotal / BitePGame)
 					/ ((BiteTotal / BitePGame) + (ClawTotal / ClawPGame)))
-					* (FC);
+					* (2 * FC);
 			int PremioClaw;
 			PremioClaw = ((float) (ClawTotal / ClawPGame)
 					/ ((BiteTotal / BitePGame) + (ClawTotal / ClawPGame)))
-					* (FC);
+					* (2 * FC);
 
 			//Normalizacion
 			while (PremioBite + PremioClaw != 2 * FC) {
@@ -202,11 +202,11 @@ public:
 			int PremioClaw;
 			PremioClaw = ((float) (ClawTotal / ClawPGame)
 					/ ((FuryTotal / FuryPGame) + (ClawTotal / ClawPGame)))
-					* (FC);
+					* (2 * FC);
 			int PremioFury;
 			PremioFury = ((float) (FuryTotal / FuryPGame)
 					/ ((FuryTotal / FuryPGame) + (ClawTotal / ClawPGame)))
-					* (FC);
+					* (2 * FC);
 
 			//Normalizacion
 			while (PremioClaw + PremioFury != 2 * FC) {
@@ -242,11 +242,11 @@ public:
 			int PremioBite;
 			PremioBite = ((float) (BiteTotal / BitePGame)
 					/ ((FuryTotal / FuryPGame) + (BiteTotal / BitePGame)))
-					* (FC);
+					* (2 * FC);
 			int PremioFury;
 			PremioFury = ((float) (FuryTotal / FuryPGame)
 					/ ((FuryTotal / FuryPGame) + (BiteTotal / BitePGame)))
-					* (FC);
+					* (2 * FC);
 
 			//Normalizacion
 			while (PremioBite + PremioFury != 2 * FC) {
