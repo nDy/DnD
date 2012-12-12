@@ -153,10 +153,6 @@ public:
 
 			PROBABILIDADDEF = PROBABILIDADDEF + PremioFury - FC;
 
-			std::cout << PROBABILIDADDEB << std::endl;
-			std::cout << PROBABILIDADDEC << std::endl;
-			std::cout << PROBABILIDADDEF << std::endl;
-
 		} else if (BitePGame != 0 && ClawPGame != 0) {
 			if (PROBABILIDADDEB > 500 && PROBABILIDADDEC > 500) {
 				FC = 500;
