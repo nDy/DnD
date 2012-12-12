@@ -79,6 +79,16 @@ public:
 
 		int FC; //Factor de correccion
 
+		std::cout
+				<< "La probabilidad de que ocurra Fury antes de aprender de los eventos ocurridos durante la partida es de "
+				<< (float) PROBABILIDADDEF / 100 << "%" << std::endl;
+		std::cout
+				<< "La probabilidad de que ocurra Claw antes de aprender de los eventos ocurridos durante la partida es de "
+				<< (float) PROBABILIDADDEC / 100 << "%" << std::endl;
+		std::cout
+				<< "La probabilidad de que ocurra Bite antes de aprender de los eventos ocurridos durante la partida es de "
+				<< (float) PROBABILIDADDEB / 100 << "%" << std::endl;
+
 		if (BitePGame != 0 && ClawPGame != 0 && FuryPGame != 0) {
 			//se ejecutan las 3 acciones de ataque en la partida
 			if (PROBABILIDADDEB > 500 && PROBABILIDADDEC > 500
@@ -273,6 +283,18 @@ public:
 			FC = 0;
 		}
 
+		std::cout << "Se usa un factor de correccion de " << FC << std::endl;
+
+		std::cout
+				<< "La probabilidad de que ocurra Fury despues de aprender de los eventos ocurridos durante la partida es de "
+				<< (float) PROBABILIDADDEF / 100 << "%" << std::endl;
+		std::cout
+				<< "La probabilidad de que ocurra Claw despues de aprender de los eventos ocurridos durante la partida es de "
+				<< (float) PROBABILIDADDEC / 100 << "%" << std::endl;
+		std::cout
+				<< "La probabilidad de que ocurra Bite despues de aprender de los eventos ocurridos durante la partida es de "
+				<< (float) PROBABILIDADDEB / 100 << "%" << std::endl;
+
 		//Cargarlas en el archivo
 		std::ofstream myfile;
 		myfile.open("Info.txt");
@@ -331,6 +353,9 @@ public:
 
 	void alimentarConocimiento(std::list<Action> AccionesHechasPorEnemigo) {
 		this->AccionesDePartida.push_back(AccionesHechasPorEnemigo);
+		std::cout
+				<< "Se alimenta la base de conocimiento con las acciones realizadas en el turno"
+				<< std::endl;
 	}
 
 	Dragon(int X, int Y, SquareGrid* Grid, Character* enemy) :
