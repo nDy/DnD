@@ -118,11 +118,6 @@ public:
 					/ ((BiteTotal / BitePGame) + (ClawTotal / ClawPGame)
 							+ (FuryTotal / FuryPGame))) * (FC);
 
-			std::cout << FC << std::endl;
-			std::cout << PremioBite << std::endl;
-			std::cout << PremioClaw << std::endl;
-			std::cout << PremioFury << std::endl;
-
 			//Normalizacion
 			while (PremioBite + PremioClaw + PremioFury != 3 * FC) {
 				if (PremioBite + PremioClaw + PremioFury > 3 * FC) {
