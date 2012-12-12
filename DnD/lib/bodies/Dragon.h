@@ -594,6 +594,16 @@ public:
 
 		this->DamageDealt = 0;
 
+		if (this->Bloodied()) {
+			std::cout << "El agente nota que se encuentra Bloodied"
+					<< std::endl;
+		}
+
+		if (this->Enemy->Bloodied()) {
+			std::cout << "El agente nota que el enemigo se encuentra Bloodied"
+					<< std::endl;
+		}
+
 		//ejecutar ataques para accion de mayor utilidad
 		for (std::list<Action>::iterator i = aux.begin(); i != aux.end(); ++i) {
 			switch ((*i).name) {
